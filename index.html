@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pavithra Design Journey — UI/UX Designer</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --background: #fbfaf8;
+            --text: #262428;
+            --muted: #726c77;
+            --lavender: #e8e1f5;
+            --pink: #f2dadf;
+            --peach: #f5e4d5;
+            --green: #dbeadb;
+            --white: #ffffff;
+            --border: rgba(38, 36, 40, 0.08);
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+            cursor: none; /* Hide standard system cursor */
+        }
+
+
+        /* --- Custom Cursor --- */
+        #cursor-dot {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 8px;
+            height: 8px;
+            background-color: var(--text);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, background-color 0.2s, opacity 0.2s;
+        }
+
+        #cursor-ring {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 42px;
+            height: 42px;
+            border: 1px solid rgba(38, 36, 40, 0.25);
+            background: rgba(232, 225, 245, 0.35);
+            backdrop-filter: blur(2px);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: transform 0.15s cubic-bezier(0.23, 1, 0.32, 1), width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s;
+        }
+
+        /* --- Ambient Background Animations --- */
+        @keyframes floatUp {
+            0% {
+                transform: translateY(105vh) scale(0.8) rotate(0deg);
+                opacity: 0;
+            }
+            15% { opacity: 0.6; }
+            85% { opacity: 0.6; }
+            100% {
+                transform: translateY(-20vh) scale(1.15) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        #bubbles-container {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+            isolation: isolate;
+        }
+
+        .ambient-bubble {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            filter: blur(1px);
+            z-index: 0;
+            animation: floatUp linear infinite;
+        }
+
+        }
+
+        .animate-float-slow {
+            animation: floatSlow 6.5s ease-in-out infinite;
+        }
+
+        .animate-pulse-glow {
+            animation: pulseGlow 5s ease-in-out infinite;
+        }
+
+        /* Smooth page transition */
+        .page-view {
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+        
+        .page-view.hidden-view {
+            display: none;
+            opacity: 0;
+            transform: translateY(12px);
+        }
+    </style>
+</head>
+<body class="selection:bg-[#f2dadf] selection:text-[#262428] min-h-screen flex flex-col justify-between relative">
+
+    <!-- AMBIENT FLOATING BUBBLES BACKGROUND (All Over Page) -->
+    <div id="bubbles-container" class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="ambient-bubble bg-[#e8e1f5]/60 w-32 h-32 left-[8%]" style="animation-duration: 22s; animation-delay: 0s;"></div>
+        <div class="ambient-bubble bg-[#f2dadf]/50 w-48 h-48 left-[25%]" style="animation-duration: 28s; animation-delay: 3s;"></div>
+        <div class="ambient-bubble bg-[#f5e4d5]/60 w-24 h-24 left-[50%]" style="animation-duration: 18s; animation-delay: 1s;"></div>
+        <div class="ambient-bubble bg-[#dbeadb]/60 w-40 h-40 left-[72%]" style="animation-duration: 25s; animation-delay: 5s;"></div>
+        <div class="ambient-bubble bg-[#e8e1f5]/50 w-56 h-56 left-[88%]" style="animation-duration: 32s; animation-delay: 2s;"></div>
+        <div class="ambient-bubble bg-[#f2dadf]/60 w-28 h-28 left-[38%]" style="animation-duration: 20s; animation-delay: 8s;"></div>
+    </div>
+
+    <!-- Custom Interactive Cursor -->
+    <div id="cursor-dot"></div>
+    <div id="cursor-ring"></div>
+
+    <!-- Header / Navigation -->
+    <header class="sticky top-0 z-50 bg-[#fbfaf8]/80 backdrop-blur-md border-b border-[rgba(38,36,40,0.06)] transition-all duration-300">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between relative z-10">
+            <!-- Brand Logo -->
+            <a href="#hero" onclick="showMainLanding()" class="group flex items-center gap-3 hover-target">
+                <div class="w-10 h-10 rounded-full bg-[#e8e1f5] flex items-center justify-center font-bold text-[#262428] border border-[rgba(38,36,40,0.08)] group-hover:scale-105 transition-transform duration-300">
+                    P
+                </div>
+                <div>
+                    <span class="font-bold text-lg tracking-tight block text-[#262428]">Pavithra</span>
+                    <span class="text-[10px] text-[#726c77] tracking-widest uppercase -mt-1 block font-medium">Design Journey</span>
+                </div>
+            </a>
+
+            <!-- Navigation Links -->
+            <nav class="hidden md:flex items-center gap-8">
+                <a href="#about" onclick="showMainLanding('about')" class="text-sm font-medium text-[#726c77] hover:text-[#262428] transition-colors hover-target py-1">About</a>
+                <a href="#work" onclick="showMainLanding('work')" class="text-sm font-medium text-[#726c77] hover:text-[#262428] transition-colors hover-target py-1">Work</a>
+                <a href="#contact" onclick="showMainLanding('contact')" class="hover-target inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#f2dadf] hover:bg-[#e8e1f5] text-[#262428] font-semibold text-sm transition-all duration-300 shadow-sm border border-[rgba(38,36,40,0.06)]">
+                    <span>Let's Connect</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </a>
+            </nav>
+
+            <!-- Mobile Menu Toggle Button -->
+            <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="md:hidden p-2 text-[#262428] focus:outline-none hover-target">
+                <i class="fa-solid fa-bars text-xl" id="menu-icon"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-[#fbfaf8] border-b border-[rgba(38,36,40,0.08)] px-6 py-4 flex flex-col gap-3">
+            <a href="#about" onclick="showMainLanding('about'); toggleMobileMenu()" class="text-base font-medium text-[#262428] py-2 border-b border-gray-100">About</a>
+            <a href="#work" onclick="showMainLanding('work'); toggleMobileMenu()" class="text-base font-medium text-[#262428] py-2 border-b border-gray-100">Work</a>
+            <a href="#contact" onclick="showMainLanding('contact'); toggleMobileMenu()" class="text-base font-medium text-[#262428] py-2 text-center rounded-full bg-[#f2dadf] mt-2">Let's Connect</a>
+        </div>
+    </header>
+
+    <!-- MAIN LANDING PAGE CONTAINER -->
+    <main id="main-landing" class="page-view flex-grow relative z-10">
+        
+        <!-- 1. HERO SECTION -->
+        <section id="hero" class="relative pt-12 pb-20 md:py-28 overflow-hidden">
+            <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Hero Left Content -->
+                <div class="lg:col-span-7 space-y-6 text-left">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#dbeadb] border border-[rgba(38,36,40,0.08)] text-xs font-semibold text-[#262428]">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                        Founding UI/UX Designer & Product Strategist
+                    </div>
+                    
+                    <h1 class="text-4xl md:text-6xl font-bold tracking-tight text-[#262428] leading-[1.15]">
+                        Crafting thoughtful, intuitive <span class="bg-gradient-to-r from-[#f2dadf] via-[#e8e1f5] to-[#f5e4d5] px-2 rounded-xl inline-block">digital experiences</span>
+                    </h1>
+
+                    <p class="text-lg text-[#726c77] font-normal leading-relaxed max-w-xl">
+                        Hi, I’m <strong>Pavithra</strong> — a UI/UX Designer dedicated to shaping human-centered interfaces, early-stage AI products, and seamless design systems.
+                    </p>
+
+                    <div class="pt-4 flex flex-wrap items-center gap-4">
+                        <a href="#work" onclick="showMainLanding('work')" class="hover-target px-7 py-3.5 rounded-full bg-[#262428] text-[#ffffff] font-medium text-sm hover:bg-[#726c77] transition-all duration-300 shadow-md flex items-center gap-2">
+                            <span>Explore Work</span>
+                            <i class="fa-solid fa-arrow-down text-xs"></i>
+                        </a>
+                        <a href="#contact" onclick="showMainLanding('contact')" class="hover-target px-7 py-3.5 rounded-full bg-[#f5e4d5] hover:bg-[#f2dadf] text-[#262428] font-medium text-sm transition-all duration-300 border border-[rgba(38,36,40,0.08)]">
+                            Get In Touch
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Hero Right: Interactive Floating Bubble Image Frame -->
+                <div class="lg:col-span-5 flex justify-center items-center relative">
+                    <div class="relative w-72 h-72 md:w-96 md:h-96 flex items-center justify-center">
+                        
+                        <!-- Background Glow Blob -->
+                        <div class="absolute inset-0 rounded-full bg-gradient-to-br from-[#e8e1f5] via-[#f2dadf] to-[#f5e4d5] blur-2xl opacity-80 animate-pulse-glow"></div>
+
+                        <!-- Main Profile Avatar Container -->
+                        <div class="relative w-64 h-64 md:w-80 md:h-80 rounded-full bg-[#ffffff] p-3 shadow-lg border border-[rgba(38,36,40,0.08)] animate-float-slow overflow-hidden z-10 flex items-center justify-center">
+                            <div class="w-full h-full rounded-full bg-gradient-to-tr from-[#f2dadf] via-[#dbeadb] to-[#e8e1f5] flex items-center justify-center relative overflow-hidden">
+                                <img
+    src="images/my photo.PNG"
+    alt="Pavithra — Product Designer"
+    class="w-full h-full object-cover rounded-full"
+/>
+                            </div>
+                        </div>
+
+                        <!-- Floating Accent Bubbles -->
+                        <div class="absolute -top-3 -left-2 w-20 h-20 rounded-full bg-[#f2dadf] border border-[rgba(38,36,40,0.08)] flex items-center justify-center shadow-sm animate-float-slow z-20 hover-target">
+                            <i class="fa-solid fa-compass-drafting text-[#262428] text-xl"></i>
+                        </div>
+
+                        <div class="absolute bottom-2 -right-4 w-24 h-24 rounded-full bg-[#dbeadb] border border-[rgba(38,36,40,0.08)] flex items-center justify-center shadow-sm animate-float-slow z-20 hover-target" style="animation-delay: -2s;">
+                            <span class="text-[11px] font-bold text-[#262428] text-center px-2">AI Systems & UX</span>
+                        </div>
+
+                        <div class="absolute top-1/2 -left-8 transform -translate-y-1/2 w-16 h-16 rounded-full bg-[#f5e4d5] border border-[rgba(38,36,40,0.08)] flex items-center justify-center shadow-sm animate-float-slow z-20" style="animation-delay: -1s;">
+                            <i class="fa-solid fa-sparkles text-[#262428]"></i>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 2. ABOUT ME SECTION -->
+        <section id="about" class="py-20 bg-[#ffffff]/90 border-y border-[rgba(38,36,40,0.06)] relative z-10">
+            <div class="max-w-6xl mx-auto px-6">
+                
+                <div class="text-center max-w-2xl mx-auto mb-12">
+                    <span class="text-xs font-bold uppercase tracking-widest text-[#726c77] bg-[#e8e1f5] px-3.5 py-1 rounded-full">Background & Journey</span>
+                    <h2 class="text-3xl md:text-4xl font-bold text-[#262428] mt-3">About Me & Experience</h2>
+                    <p class="text-[#726c77] mt-3 text-sm md:text-base">Bridging strategic user research, complex AI workflows, and elegant frontend implementation.</p>
+                </div>
+
+                <!-- Centered Bio Card -->
+                <div class="max-w-3xl mx-auto mb-12">
+                    <div class="bg-[#fbfaf8] p-8 md:p-10 rounded-2xl border border-[rgba(38,36,40,0.08)] shadow-sm text-center space-y-4">
+                        <h3 class="text-2xl font-bold text-[#262428]">Hello, I'm Pavithra</h3>
+                        <p class="text-[#726c77] text-sm md:text-base leading-relaxed">
+                            Currently serving as <strong>Founding UI/UX Designer at The Saathy</strong>, where I lead product design for early-stage AI products. With a strong foundation in Computer Science and hands-on UX experience across web, mobile, and SaaS solutions, I transform complex business requirements into sleek, scalable, user-centered digital products.
+                        </p>
+
+                        <hr class="border-[rgba(38,36,40,0.06)] my-4">
+
+                        <!-- Social Links -->
+                        <div class="flex flex-col items-center">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-[#726c77] block mb-3">Connect With Me</span>
+                            <div class="flex items-center justify-center gap-3">
+                                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="hover-target w-11 h-11 rounded-full bg-[#f2dadf] hover:bg-[#e8e1f5] text-[#262428] flex items-center justify-center text-lg transition-all transform hover:-translate-y-1 shadow-sm" title="Instagram">
+                                    <i class="fa-brands fa-instagram"></i>
+                                </a>
+                                <a href="https://www.linkedin.com/in/pavithradesigns/?isSelfProfile=true" target="_blank" rel="noopener noreferrer" class="hover-target w-11 h-11 rounded-full bg-[#e8e1f5] hover:bg-[#f2dadf] text-[#262428] flex items-center justify-center text-lg transition-all transform hover:-translate-y-1 shadow-sm" title="LinkedIn">
+                                    <i class="fa-brands fa-linkedin-in"></i>
+                                </a>
+                                <a href="https://www.behance.net/pavithrasdesignjour" target="_blank" rel="noopener noreferrer" class="hover-target w-11 h-11 rounded-full bg-[#f5e4d5] hover:bg-[#dbeadb] text-[#262428] flex items-center justify-center text-lg transition-all transform hover:-translate-y-1 shadow-sm" title="Behance">
+                                    <i class="fa-brands fa-behance"></i>
+                                </a>
+                                <a href="https://dribbble.com/designwith_pavithra" target="_blank" rel="noopener noreferrer" class="hover-target w-11 h-11 rounded-full bg-[#dbeadb] hover:bg-[#f5e4d5] text-[#262428] flex items-center justify-center text-lg transition-all transform hover:-translate-y-1 shadow-sm" title="Dribbble">
+                                    <i class="fa-brands fa-dribbble"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Updated Experience & Education Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+                    
+                    <!-- Work Experience Column -->
+                    <div class="bg-[#fbfaf8] p-8 rounded-2xl border border-[rgba(38,36,40,0.08)] shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 mb-6">
+                                <div class="w-10 h-10 rounded-xl bg-[#dbeadb] flex items-center justify-center text-[#262428]">
+                                    <i class="fa-solid fa-briefcase"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-[#262428]">Work Experience</h3>
+                            </div>
+
+                            <div class="space-y-6 relative border-l-2 border-[#e8e1f5] ml-4 pl-6">
+                                <!-- The Saathy -->
+                                <div class="relative">
+                                    <span class="absolute -left-[31px] top-1.5 w-3.5 h-3.5 rounded-full bg-[#262428] border-2 border-[#ffffff]"></span>
+                                    <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-[#e8e1f5] text-[#262428]">04/2026 - Present</span>
+                                    <h4 class="text-base font-bold text-[#262428] mt-1">Founding UI/UX Designer</h4>
+                                    <p class="text-xs text-[#726c77] font-semibold">The Saathy • Remote AI Startup</p>
+                                    <ul class="text-xs text-[#726c77] mt-2 space-y-1 list-disc list-inside leading-relaxed">
+                                        <li>Leading product design, user flows & interactive Figma prototypes for web AI products.</li>
+                                        <li>Partnering with founders to align user research with core product goals.</li>
+                                        <li>Establishing component libraries and design patterns for dev handoff.</li>
+                                    </ul>
+                                </div>
+
+                                <!-- Freelancer -->
+                                <div class="relative">
+                                    <span class="absolute -left-[31px] top-1.5 w-3.5 h-3.5 rounded-full bg-[#726c77] border-2 border-[#ffffff]"></span>
+                                    <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-[#f2dadf] text-[#262428]">11/2025 - Present</span>
+                                    <h4 class="text-base font-bold text-[#262428] mt-1">Freelance UI/UX Designer</h4>
+                                    <p class="text-xs text-[#726c77] font-semibold">Remote</p>
+                                    <ul class="text-xs text-[#726c77] mt-2 space-y-1 list-disc list-inside leading-relaxed">
+                                        <li>Crafting responsive websites and landing pages across various client industries.</li>
+                                        <li>Delivering intuitive user journeys from discovery through final launch.</li>
+                                    </ul>
+                                </div>
+
+                                <!-- Zidio Development -->
+                                <div class="relative">
+                                    <span class="absolute -left-[31px] top-1.5 w-3.5 h-3.5 rounded-full bg-[#726c77] border-2 border-[#ffffff]"></span>
+                                    <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-[#f5e4d5] text-[#262428]">08/2025 - 11/2025</span>
+                                    <h4 class="text-base font-bold text-[#262428] mt-1">UI/UX Design Intern</h4>
+                                    <p class="text-xs text-[#726c77] font-semibold">Zidio Development • Remote</p>
+                                    <ul class="text-xs text-[#726c77] mt-2 space-y-1 list-disc list-inside leading-relaxed">
+                                        <li>Conducted user research and usability testing to eliminate product friction.</li>
+                                        <li>Created interactive prototypes and collaborated with dev teams on implementation.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Education Column -->
+                    <div class="bg-[#fbfaf8] p-8 rounded-2xl border border-[rgba(38,36,40,0.08)] shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 mb-6">
+                                <div class="w-10 h-10 rounded-xl bg-[#f5e4d5] flex items-center justify-center text-[#262428]">
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-[#262428]">Education & Certifications</h3>
+                            </div>
+
+                            <div class="space-y-6 relative border-l-2 border-[#f2dadf] ml-4 pl-6">
+                                <!-- Degree -->
+                                <div class="relative">
+                                    <span class="absolute -left-[31px] top-1.5 w-3.5 h-3.5 rounded-full bg-[#262428] border-2 border-[#ffffff]"></span>
+                                    <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-[#f5e4d5] text-[#262428]">09/2022</span>
+                                    <h4 class="text-base font-bold text-[#262428] mt-1">Bachelor of Science (Computer Science - PMC)</h4>
+                                    <p class="text-xs text-[#726c77] font-semibold">NMKRV College For Women</p>
+                                    <p class="text-xs text-[#726c77] mt-2 leading-relaxed">
+                                        Specialized in Computer Science, HTML/CSS frontend development techniques, and building responsive digital layouts.
+                                    </p>
+                                </div>
+
+                                <!-- IBM -->
+                                <div class="relative">
+                                    <span class="absolute -left-[31px] top-1.5 w-3.5 h-3.5 rounded-full bg-[#726c77] border-2 border-[#ffffff]"></span>
+                                    <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-[#e8e1f5] text-[#262428]">Present</span>
+                                    <h4 class="text-base font-bold text-[#262428] mt-1">IBM UI/UX Design Certification</h4>
+                                    <p class="text-xs text-[#726c77] font-semibold">Currently Pursuing</p>
+                                    <p class="text-xs text-[#726c77] mt-1 leading-relaxed">
+                                        Focusing on advanced interaction design methodologies, enterprise product UX, and design logic.
+                                    </p>
+                                </div>
+
+                                <!-- Internshala -->
+                                <div class="relative">
+                                    <span class="absolute -left-[31px] top-1.5 w-3.5 h-3.5 rounded-full bg-[#726c77] border-2 border-[#ffffff]"></span>
+                                    <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-[#dbeadb] text-[#262428]">02/2024 - 10/2024</span>
+                                    <h4 class="text-base font-bold text-[#262428] mt-1">UI/UX Design Specialization</h4>
+                                    <p class="text-xs text-[#726c77] font-semibold">Internshala</p>
+                                    <p class="text-xs text-[#726c77] mt-1 leading-relaxed">
+                                        Covered user research methodologies, wireframing, and high-fidelity prototyping using Figma.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+ <!-- 3. PROJECTS SECTION (2x2 Grid) -->
+<section id="work" class="py-20 relative z-10">
+    <div class="max-w-6xl mx-auto px-6">
+        
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+            <div>
+                <span class="text-xs font-bold uppercase tracking-widest text-[#726c77] bg-[#f2dadf] px-3.5 py-1 rounded-full">Selected Projects</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-[#262428] mt-3">Featured Work</h2>
+            </div>
+            <p class="text-[#726c77] text-sm mt-3 md:mt-0 max-w-sm">Interactive case studies detailing end-to-end design research, AI flows, and visual systems.</p>
+        </div>
+
+        <!-- 2x2 Grid Container -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="projects-grid">
+            
+            <!-- Project 1 (Lavender) -> Nura.html -->
+            <a href="Nura.html" class="hover-target group bg-[#e8e1f5] p-8 rounded-3xl border border-[rgba(38,36,40,0.08)] transition-all duration-300 hover:-translate-y-2 hover:shadow-lg cursor-pointer flex flex-col justify-between min-h-[360px] block">
+                <div>
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="px-3 py-1 rounded-full bg-[#ffffff] text-xs font-semibold text-[#262428] shadow-sm">AI Healthcare Product</span>
+                        <span class="w-10 h-10 rounded-full bg-[#ffffff] flex items-center justify-center text-[#262428] group-hover:bg-[#262428] group-hover:text-[#ffffff] transition-colors">
+                            <i class="fa-solid fa-arrow-right text-sm"></i>
+                        </span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-[#262428] mb-3 group-hover:underline">Nura — AI Doctor Experience</h3>
+                    <p class="text-[#726c77] text-sm leading-relaxed mb-6">
+                        Designing AI-powered healthcare features that simplify health management, improve access to medical information, and deliver personalized guidance through a user-friendly, patient-centered experience.
+                    </p>
+                </div>
+                
+                <div class="bg-[#ffffff]/80 p-4 rounded-2xl border border-[rgba(38,36,40,0.06)] flex items-center justify-between group-hover:bg-[#ffffff]">
+                    <span class="text-xs font-bold text-[#262428] flex items-center gap-1.5">
+                        View Case Study
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                    </span>
+                    <span class="text-xs text-[#726c77]">AI Workflows • Healthcare</span>
+                </div>
+            </a>
+
+            <!-- Project 2 (Pink) -> Feastfinder.html -->
+            <a href="Feastfinder.html" class="hover-target group bg-[#f2dadf] p-8 rounded-3xl border border-[rgba(38,36,40,0.08)] transition-all duration-300 hover:-translate-y-2 hover:shadow-lg cursor-pointer flex flex-col justify-between min-h-[360px] block">
+                <div>
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="px-3 py-1 rounded-full bg-[#ffffff] text-xs font-semibold text-[#262428] shadow-sm"> Desktop Website</span>
+                        <span class="w-10 h-10 rounded-full bg-[#ffffff] flex items-center justify-center text-[#262428] group-hover:bg-[#262428] group-hover:text-[#ffffff] transition-colors">
+                            <i class="fa-solid fa-arrow-right text-sm"></i>
+                        </span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-[#262428] mb-3 group-hover:underline">FeastFinder — Recipe Sharing Website</h3>
+                    <p class="text-[#726c77] text-sm leading-relaxed mb-6">
+Designed a recipe-sharing website that helps people save time with easy-to-follow recipes while sharing, uploading, and collaborating on recipe ideas with a community of food lovers.                    </p>
+                </div>
+                
+                <div class="bg-[#ffffff]/80 p-4 rounded-2xl border border-[rgba(38,36,40,0.06)] flex items-center justify-between group-hover:bg-[#ffffff]">
+                    <span class="text-xs font-bold text-[#262428] flex items-center gap-1.5">
+                        View Case Study
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                    </span>
+                    <span class="text-xs text-[#726c77]">Design System • UX Wireframing</span>
+                </div>
+            </a>
+
+            <!-- Project 3 (Peach) -> dashboard.html -->
+            <a href="dashboard.html" class="hover-target group bg-[#f5e4d5] p-8 rounded-3xl border border-[rgba(38,36,40,0.08)] transition-all duration-300 hover:-translate-y-2 hover:shadow-lg cursor-pointer flex flex-col justify-between min-h-[360px] block">
+                <div>
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="px-3 py-1 rounded-full bg-[#ffffff] text-xs font-semibold text-[#262428] shadow-sm">Healthcare Dashboard</span>
+                        <span class="w-10 h-10 rounded-full bg-[#ffffff] flex items-center justify-center text-[#262428] group-hover:bg-[#262428] group-hover:text-[#ffffff] transition-colors">
+                            <i class="fa-solid fa-arrow-right text-sm"></i>
+                        </span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-[#262428] mb-3 group-hover:underline">Care — Doctor's Dashboard</h3>
+                    <p class="text-[#726c77] text-sm leading-relaxed mb-6">
+Designed a responsive dashboard for both desktop and mobile, incorporating useful features to improve accessibility, simplify navigation, and enhance the overall user experience.                    </p>
+                </div>
+                
+                <div class="bg-[#ffffff]/80 p-4 rounded-2xl border border-[rgba(38,36,40,0.06)] flex items-center justify-between group-hover:bg-[#ffffff]">
+                    <span class="text-xs font-bold text-[#262428] flex items-center gap-1.5">
+                        View Case Study
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                    </span>
+                    <span class="text-xs text-[#726c77]">Healthcare • Dashboard UI</span>
+                </div>
+            </a>
+
+            <!-- Project 4 (Green) -> eventmingle.html -->
+            <a href="eventmingle.html" class="hover-target group bg-[#dbeadb] p-8 rounded-3xl border border-[rgba(38,36,40,0.08)] transition-all duration-300 hover:-translate-y-2 hover:shadow-lg cursor-pointer flex flex-col justify-between min-h-[360px] block">
+                <div>
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="px-3 py-1 rounded-full bg-[#ffffff] text-xs font-semibold text-[#262428] shadow-sm">Event-Management</span>
+                        <span class="w-10 h-10 rounded-full bg-[#ffffff] flex items-center justify-center text-[#262428] group-hover:bg-[#262428] group-hover:text-[#ffffff] transition-colors">
+                            <i class="fa-solid fa-arrow-right text-sm"></i>
+                        </span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-[#262428] mb-3 group-hover:underline">EventMingle - Event Management Website</h3>
+                    <p class="text-[#726c77] text-sm leading-relaxed mb-6">
+EventMingle is an event discovery and booking website that allows users to create events, explore events happening around the world, connect with communities, and book their spots seamlessly.                    </p>
+                </div>
+                
+                <div class="bg-[#ffffff]/80 p-4 rounded-2xl border border-[rgba(38,36,40,0.06)] flex items-center justify-between group-hover:bg-[#ffffff]">
+                    <span class="text-xs font-bold text-[#262428] flex items-center gap-1.5">
+                        View Case Study
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                    </span>
+                    <span class="text-xs text-[#726c77]">Accessibility • Events & Entertainment</span>
+                </div>
+            </a>
+
+        </div>
+
+    </div>
+</section>
+<!-- 4. CONTACT SECTION -->
+        <section id="contact" class="py-20 bg-[#ffffff]/90 border-t border-[rgba(38,36,40,0.06)] relative z-10">
+            <div class="max-w-6xl mx-auto px-6">
+                
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                    
+                    <!-- Contact Info -->
+                    <div class="lg:col-span-5 space-y-8">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-widest text-[#726c77] bg-[#f5e4d5] px-3.5 py-1 rounded-full">Let's Connect</span>
+                            <h2 class="text-3xl md:text-4xl font-bold text-[#262428] mt-4">Have a project in mind? Let's chat!</h2>
+                            <p class="text-[#726c77] text-sm md:text-base mt-4 leading-relaxed">
+                                Whether you're looking for product design collaboration, freelance projects, or standard inquiry, drop me a message!
+                            </p>
+                        </div>
+
+                        <div class="space-y-4">
+                            <!-- Phone -->
+                            <a href="tel:7019240493" class="hover-target flex items-center gap-4 p-5 rounded-2xl bg-[#fbfaf8] border border-[rgba(38,36,40,0.08)] hover:bg-[#dbeadb] transition-colors">
+                                <div class="w-12 h-12 rounded-full bg-[#ffffff] shadow-sm flex items-center justify-center text-[#262428] shrink-0">
+                                    <i class="fa-solid fa-phone"></i>
+                                </div>
+                                <div>
+                                    <span class="text-[11px] text-[#726c77] font-semibold uppercase tracking-wider block">Phone / WhatsApp</span>
+                                    <span class="text-base font-bold text-[#262428]">+91 7019240493</span>
+                                </div>
+                            </a>
+
+                            <!-- Email -->
+                            <a href="mailto:pavithrasoundarrajan.18@gmail.com" class="hover-target flex items-center gap-4 p-5 rounded-2xl bg-[#fbfaf8] border border-[rgba(38,36,40,0.08)] hover:bg-[#f2dadf] transition-colors">
+                                <div class="w-12 h-12 rounded-full bg-[#ffffff] shadow-sm flex items-center justify-center text-[#262428] shrink-0">
+                                    <i class="fa-solid fa-envelope"></i>
+                                </div>
+                                <div class="overflow-hidden">
+                                    <span class="text-[11px] text-[#726c77] font-semibold uppercase tracking-wider block">Email Me</span>
+                                    <span class="text-xs md:text-sm font-bold text-[#262428] truncate block">pavithrasoundarrajan.18@gmail.com</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Form -->
+                    <div class="lg:col-span-7">
+                        <div class="bg-[#fbfaf8] p-8 md:p-10 rounded-3xl border border-[rgba(38,36,40,0.08)] shadow-sm">
+                            <form id="contact-form" onsubmit="handleFormSubmit(event)" class="space-y-5">
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                    <div>
+                                        <label for="form-name" class="block text-[11px] font-bold text-[#262428] uppercase tracking-wider mb-2">Your Name *</label>
+                                        <input type="text" id="form-name" required placeholder="John Doe" class="hover-target w-full px-4 py-3 rounded-xl bg-[#ffffff] border border-[rgba(38,36,40,0.1)] text-[#262428] text-sm focus:outline-none focus:ring-2 focus:ring-[#262428] transition-all">
+                                    </div>
+
+                                    <div>
+                                        <label for="form-email" class="block text-[11px] font-bold text-[#262428] uppercase tracking-wider mb-2">Mail ID *</label>
+                                        <input type="email" id="form-email" required placeholder="john@example.com" class="hover-target w-full px-4 py-3 rounded-xl bg-[#ffffff] border border-[rgba(38,36,40,0.1)] text-[#262428] text-sm focus:outline-none focus:ring-2 focus:ring-[#262428] transition-all">
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label for="form-mobile" class="block text-[11px] font-bold text-[#262428] uppercase tracking-wider mb-2">Mobile No <span class="text-[#726c77] font-normal">(Optional)</span></label>
+                                    <input type="tel" id="form-mobile" placeholder="+91 9876543210" class="hover-target w-full px-4 py-3 rounded-xl bg-[#ffffff] border border-[rgba(38,36,40,0.1)] text-[#262428] text-sm focus:outline-none focus:ring-2 focus:ring-[#262428] transition-all">
+                                </div>
+
+                                <div>
+                                    <label for="form-project" class="block text-[11px] font-bold text-[#262428] uppercase tracking-wider mb-2">Project Details *</label>
+                                    <textarea id="form-project" rows="3" required placeholder="Describe your project, ideas, or requirements..." class="hover-target w-full px-4 py-3 rounded-xl bg-[#ffffff] border border-[rgba(38,36,40,0.1)] text-[#262428] text-sm focus:outline-none focus:ring-2 focus:ring-[#262428] transition-all resize-none"></textarea>
+                                </div>
+
+                                <div>
+                                    <label for="form-note" class="block text-[11px] font-bold text-[#262428] uppercase tracking-wider mb-2">Note <span class="text-[#726c77] font-normal">(Optional)</span></label>
+                                    <input type="text" id="form-note" placeholder="Any additional note or timeline preferences..." class="hover-target w-full px-4 py-3 rounded-xl bg-[#ffffff] border border-[rgba(38,36,40,0.1)] text-[#262428] text-sm focus:outline-none focus:ring-2 focus:ring-[#262428] transition-all">
+                                </div>
+
+                                <button type="submit" class="hover-target w-full py-4 rounded-xl bg-[#262428] hover:bg-[#726c77] text-[#ffffff] font-bold text-sm tracking-wide transition-all shadow-md flex items-center justify-center gap-2">
+                                    <span>Send Message</span>
+                                    <i class="fa-solid fa-paper-plane text-xs"></i>
+                                </button>
+                            </form>
+
+                            <div id="form-success" class="hidden mt-4 p-4 rounded-xl bg-[#dbeadb] border border-emerald-300 text-[#262428] text-center">
+                                <i class="fa-solid fa-circle-check text-xl mb-1 text-emerald-700"></i>
+                                <p class="font-bold text-sm">Thank you for getting in touch!</p>
+                                <p class="text-xs text-[#726c77] mt-1">I will review your message and reply as soon as possible.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+    </main><!-- 5. FOOTER -->
+    <footer class="bg-[#ffffff] border-t border-[rgba(38,36,40,0.08)] py-8 relative z-10">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-2">
+                <span class="font-bold text-sm text-[#262428]">Pavithra Design Journey</span>
+                <span class="text-xs text-[#726c77]">© <span id="current-year"></span> All Rights Reserved</span>
+            </div>
+
+            <div class="flex items-center gap-6 text-xs text-[#726c77]">
+                <a href="my portfolio.html#hero" onclick="showMainLanding()" class="hover:text-[#262428] hover-target">Home</a>
+                <a href=" my portfolio.html#about" onclick="showMainLanding('about')" class="hover:text-[#262428] hover-target">About</a>
+                <a href="my portfolio.html#work" onclick="showMainLanding('work')" class="hover:text-[#262428] hover-target">Work</a>
+                <a href="my portfolio.html#contact" onclick="showMainLanding('contact')" class="hover:text-[#262428] hover-target">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+
+ <!-- Working Custom Cursor Script -->
+<script>
+  const cursorDot = document.getElementById('cursor-dot');
+  const cursorRing = document.getElementById('cursor-ring');
+  
+  let mouseX = 0, mouseY = 0;
+  let ringX = 0, ringY = 0;
+
+  window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    cursorDot.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
+  });
+
+  function renderCursor() {
+    ringX += (mouseX - ringX) * 0.2;
+    ringY += (mouseY - ringY) * 0.2;
+    cursorRing.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
+    requestAnimationFrame(renderCursor);
+  }
+  
+  requestAnimationFrame(renderCursor);
+
+  // Hover animations for interactive components
+  const hoverTargets = document.querySelectorAll('a, button, input, textarea');
+  
+  hoverTargets.forEach(target => {
+    target.addEventListener('mouseenter', () => {
+      cursorRing.style.width = '64px';
+      cursorRing.style.height = '64px';
+      cursorRing.style.backgroundColor = 'rgba(232, 225, 245, 0.6)';
+      cursorRing.style.borderColor = 'rgba(38, 36, 40, 0.4)';
+    });
+    
+    target.addEventListener('mouseleave', () => {
+      cursorRing.style.width = '42px';
+      cursorRing.style.height = '42px';
+      cursorRing.style.backgroundColor = 'rgba(232, 225, 245, 0.35)';
+      cursorRing.style.borderColor = 'rgba(38, 36, 40, 0.25)';
+    });
+  });
+</script>
+
+
+</body>
+</html>
+        

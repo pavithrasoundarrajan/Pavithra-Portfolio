@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FeastFinder — UI/UX Case Study | Pavithra Design Journey</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --background: #fbfaf8;
+            --text: #262428;
+            --muted: #726c77;
+            --lavender: #e8e1f5;
+            --pink: #f2dadf;
+            --peach: #f5e4d5;
+            --green: #dbeadb;
+            --white: #ffffff;
+            --border: rgba(38, 36, 40, 0.08);
+            --shadow-sm: 0 4px 12px rgba(38, 36, 40, 0.03);
+            --shadow-md: 0 8px 24px rgba(38, 36, 40, 0.06);
+            --shadow-lg: 0 16px 36px rgba(38, 36, 40, 0.1);
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Hide default cursor on desktop */
+        @media (min-width: 768px) {
+            body, a, button, input, .feature-card, .strategy-card, .screen-card {
+                cursor: none !important;
+            }
+        }
+
+        /* --- Custom Interactive Cursor --- */
+        #cursor-dot {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 8px;
+            height: 8px;
+            background-color: var(--text);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 99999;
+            transform: translate(-50%, -50%);
+            will-change: transform;
+        }
+
+        #cursor-ring {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(38, 36, 40, 0.25);
+            background: rgba(232, 225, 245, 0.3);
+            backdrop-filter: blur(1px);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 99998;
+            transform: translate(-50%, -50%);
+            transition: width 0.25s ease, height 0.25s ease, background-color 0.25s ease, border-color 0.25s ease;
+            will-change: transform;
+        }
+
+        /* --- Ambient Background Animations --- */
+        @keyframes floatUp {
+            0% {
+                transform: translateY(105vh) scale(0.8) rotate(0deg);
+                opacity: 0;
+            }
+            15% { opacity: 0.6; }
+            85% { opacity: 0.6; }
+            100% {
+                transform: translateY(-20vh) scale(1.15) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        #bubbles-container {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+            isolation: isolate;
+        }
+
+        .ambient-bubble {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            filter: blur(1px);
+            z-index: 0;
+            animation: floatUp linear infinite;
+        }
+
+        header, main, footer {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Section Headings */
+        .section-header {
+            margin-bottom: 40px;
+        }
+
+        .section-tag {
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1.6px;
+            font-weight: 800;
+            color: var(--muted);
+            margin-bottom: 12px;
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--white);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .section-title {
+            font-size: 40px;
+            font-weight: 800;
+            letter-spacing: -0.6px;
+            color: var(--text);
+            margin-bottom: 16px;
+            line-height: 1.25;
+        }
+
+        .section-subtitle {
+            font-size: 16px;
+            color: var(--muted);
+            max-width: 820px;
+            font-weight: 400;
+            line-height: 1.65;
+        }
+
+        /* Strategy Grid */
+        .strategy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 28px;
+            margin-top: 36px;
+            margin-bottom: 64px;
+        }
+
+        .strategy-card {
+            border-radius: 24px;
+            padding: 32px 28px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .strategy-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .bg-pink { background-color: var(--pink); }
+        .bg-lavender { background-color: var(--lavender); }
+        .bg-peach { background-color: var(--peach); }
+        .bg-green { background-color: var(--green); }
+
+        .strategy-tag {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text);
+            opacity: 0.7;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .strategy-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+
+        .strategy-desc {
+            font-size: 14.5px;
+            color: var(--text);
+            opacity: 0.9;
+            line-height: 1.65;
+        }
+
+        /* Filters */
+        .filter-container {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: var(--white);
+            border: 1px solid var(--border);
+            color: var(--muted);
+            padding: 12px 22px;
+            border-radius: 14px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .filter-btn:hover {
+            color: var(--text);
+            border-color: var(--text);
+            transform: translateY(-2px);
+        }
+
+        .filter-btn.active {
+            background: var(--text);
+            color: var(--white);
+            border-color: var(--text);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Feature Cards */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 32px;
+            margin-bottom: 60px;
+        }
+
+        .feature-card {
+            background-color: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 36px 32px;
+            position: relative;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            transition: height 0.3s ease;
+        }
+
+        .card-pink::before { background-color: #e0b2bb; }
+        .card-lavender::before { background-color: #cbbbe3; }
+        .card-peach::before { background-color: #e7c2a7; }
+        .card-green::before { background-color: #b3d5b3; }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .card-number {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--text);
+            padding: 6px 14px;
+            border-radius: 10px;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+
+        .card-pink .card-number { background: var(--pink); }
+        .card-lavender .card-number { background: var(--lavender); }
+        .card-peach .card-number { background: var(--peach); }
+        .card-green .card-number { background: var(--green); }
+
+        .card-tag {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--muted);
+            transition: color 0.3s ease;
+        }
+
+        .feature-heading {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 16px;
+            line-height: 1.3;
+            transition: color 0.3s ease;
+        }
+
+        .feature-explanation {
+            font-size: 14.5px;
+            color: var(--muted);
+            line-height: 1.65;
+            transition: color 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            border-color: rgba(38, 36, 40, 0.15);
+        }
+
+        .feature-card:hover::before {
+            height: 100%;
+            z-index: 0;
+            opacity: 0.15;
+        }
+
+        .feature-card > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-lavender:hover { background-color: var(--lavender); }
+        .card-pink:hover { background-color: var(--pink); }
+        .card-peach:hover { background-color: var(--peach); }
+        .card-green:hover { background-color: var(--green); }
+
+        .feature-card:hover .feature-explanation,
+        .feature-card:hover .card-tag {
+            color: var(--text);
+        }
+
+        .feature-card:hover .card-number {
+            background: var(--white);
+            color: var(--text);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .feature-card.is-hidden {
+            display: none;
+        }
+
+        /* Screen Cards */
+        .figma-screens-section {
+            margin-top: 80px;
+            padding-top: 56px;
+            border-top: 2px dashed var(--border);
+        }
+
+        .figma-screens-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 48px;
+            margin-top: 36px;
+            margin-bottom: 64px;
+        }
+
+        .screen-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            padding: 32px;
+            width: 100%;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.35s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .screen-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: rgba(38, 36, 40, 0.15);
+        }
+
+        .screen-header-meta {
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .screen-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .screen-image-container {
+            width: 100%;
+            max-height: 750px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            border-radius: 20px;
+            background-color: #f2edf8;
+            border: 1px solid var(--border);
+            position: relative;
+        }
+
+        .figma-screen-img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            display: block;
+            border-radius: 12px;
+        }
+
+        .screen-caption {
+            margin-top: 16px;
+            font-size: 14px;
+            color: var(--muted);
+            text-align: center;
+            line-height: 1.5;
+            width: 100%;
+        }
+
+        /* Conclusion Banner */
+        .conclusion-section {
+            background-color: var(--lavender);
+            border: 1px solid var(--border);
+            border-radius: 32px;
+            padding: 72px 32px;
+            text-align: center;
+            margin-top: 64px;
+            margin-bottom: 32px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .conclusion-container {
+            max-width: 720px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .conclusion-badge {
+            display: inline-block;
+            padding: 6px 18px;
+            background: var(--white);
+            color: var(--text);
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .conclusion-title {
+            font-size: 34px;
+            font-weight: 800;
+            color: var(--text);
+            line-height: 1.25;
+        }
+
+        .conclusion-desc {
+            font-size: 16px;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .conclusion-actions {
+            display: flex;
+            gap: 16px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .conclusion-btn {
+            padding: 14px 28px;
+            border-radius: 16px;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .primary-btn {
+            background: var(--text);
+            color: var(--white);
+            border: 1px solid var(--text);
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            opacity: 0.92;
+        }
+
+        .secondary-btn {
+            background: var(--white);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .secondary-btn:hover {
+            border-color: var(--text);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 0; }
+            .section-title { font-size: 30px; }
+            .strategy-grid, .feature-grid { grid-template-columns: 1fr; gap: 24px; }
+            .conclusion-section { padding: 48px 20px; border-radius: 24px; }
+            .conclusion-title { font-size: 26px; }
+            .conclusion-actions { flex-direction: column; width: 100%; }
+            .conclusion-btn { width: 100%; text-align: center; }
+        }
+    </style>
+</head>
+<body class="selection:bg-[#f2dadf] selection:text-[#262428] min-h-screen flex flex-col justify-between relative">
+
+  <!-- Ambient Floating Bubbles Background -->
+  <div id="bubbles-container">
+    <div class="ambient-bubble bg-[#e8e1f5]/60 w-32 h-32 left-[8%]" style="animation-duration: 22s; animation-delay: 0s;"></div>
+    <div class="ambient-bubble bg-[#f2dadf]/50 w-48 h-48 left-[25%]" style="animation-duration: 28s; animation-delay: 3s;"></div>
+    <div class="ambient-bubble bg-[#f5e4d5]/60 w-24 h-24 left-[50%]" style="animation-duration: 18s; animation-delay: 1s;"></div>
+    <div class="ambient-bubble bg-[#dbeadb]/60 w-40 h-40 left-[72%]" style="animation-duration: 25s; animation-delay: 5s;"></div>
+    <div class="ambient-bubble bg-[#e8e1f5]/50 w-56 h-56 left-[88%]" style="animation-duration: 32s; animation-delay: 2s;"></div>
+    <div class="ambient-bubble bg-[#f2dadf]/60 w-28 h-28 left-[38%]" style="animation-duration: 20s; animation-delay: 8s;"></div>
+  </div>
+
+  <!-- Custom Interactive Cursor -->
+  <div id="cursor-dot"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- Header / Navigation -->
+  <header class="sticky top-0 z-50 bg-[#fbfaf8]/80 backdrop-blur-md border-b border-[rgba(38,36,40,0.06)] transition-all duration-300">
+      <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between relative z-10">
+          <a href="index.html#hero" class="group flex items-center gap-3 hover-target">
+              <div class="w-10 h-10 rounded-full bg-[#e8e1f5] flex items-center justify-center font-bold text-[#262428] border border-[rgba(38,36,40,0.08)] group-hover:scale-105 transition-transform duration-300">
+                  P
+              </div>
+              <div>
+                  <span class="font-bold text-lg tracking-tight block text-[#262428]">Pavithra</span>
+                  <span class="text-[10px] text-[#726c77] tracking-widest uppercase -mt-1 block font-medium">Design Journey</span>
+              </div>
+          </a>
+
+          <nav class="hidden md:flex items-center gap-8">
+              <a href="index.html#about" class="text-sm font-medium text-[#726c77] hover:text-[#262428] transition-colors hover-target py-1">About</a>
+              <a href="index.html#work" class="text-sm font-medium text-[#726c77] hover:text-[#262428] transition-colors hover-target py-1">Work</a>
+              <a href="index.html#contact" class="hover-target inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#f2dadf] hover:bg-[#e8e1f5] text-[#262428] font-semibold text-sm transition-all duration-300 shadow-sm border border-[rgba(38,36,40,0.06)]">
+                  <span>Let's Connect</span>
+                  <i class="fa-solid fa-arrow-right text-xs"></i>
+              </a>
+          </nav>
+
+          <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="md:hidden p-2 text-[#262428] focus:outline-none hover-target">
+              <i class="fa-solid fa-bars text-xl" id="menu-icon"></i>
+          </button>
+      </div>
+
+      <div id="mobile-menu" class="hidden md:hidden bg-[#fbfaf8] border-b border-[rgba(38,36,40,0.08)] px-6 py-4 flex flex-col gap-3">
+          <a href="index.html#about" onclick="toggleMobileMenu()" class="text-base font-medium text-[#262428] py-2 border-b border-gray-100">About</a>
+          <a href="index.html#work" onclick="toggleMobileMenu()" class="text-base font-medium text-[#262428] py-2 border-b border-gray-100">Work</a>
+          <a href="index.html#contact" onclick="toggleMobileMenu()" class="text-base font-medium text-[#262428] py-2 text-center rounded-full bg-[#f2dadf] mt-2">Let's Connect</a>
+      </div>
+  </header>
+
+  <!-- Main Content Body -->
+  <main class="flex-grow">
+      
+      <!-- 1. Hero / Project Overview -->
+      <section id="overview" class="py-16 md:py-24 border-b border-[rgba(38,36,40,0.06)] bg-gradient-to-b from-[#e8e1f5]/30 via-transparent to-transparent">
+          <div class="max-w-6xl mx-auto px-6">
+              <a href="index.html#work" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#ffffff] hover:bg-[#e8e1f5] text-[#262428] border border-[rgba(38,36,40,0.1)] font-semibold text-sm transition-all shadow-sm mb-8 hover-target">
+                  <i class="fa-solid fa-arrow-left text-xs"></i>
+                  <span>Back to Projects</span>
+              </a>
+
+              <div class="flex flex-wrap items-center gap-3 mb-6">
+                  <span class="px-3.5 py-1 rounded-full bg-[#dbeadb] text-[#262428] text-xs font-bold border border-[rgba(38,36,40,0.08)]">
+                      <i class="fa-solid fa-utensils mr-1"></i> Food &amp; Recipe Sharing Web UX Concept
+                  </span>
+                  <span class="px-3.5 py-1 rounded-full bg-[#f2dadf] text-[#262428] text-xs font-bold border border-[rgba(38,36,40,0.08)]">
+                      Case Study #02
+                  </span>
+              </div>
+
+              <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-[#262428] leading-tight mb-6">
+                  FeastFinder: A Community-Driven Recipe Sharing Platform
+              </h1>
+
+              <p class="text-lg md:text-xl text-[#726c77] max-w-3xl leading-relaxed mb-10">
+                  FeastFinder is an all-in-one platform for culinary enthusiasts offering comprehensive recipe collections, an easy-to-use ingredient-based search filter, step-by-step cooking guides, and a community space for sharing recipes.
+              </p>
+
+              <!-- Meta Details Grid -->
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 bg-[#ffffff] rounded-2xl border border-[rgba(38,36,40,0.08)] shadow-sm">
+                  <div>
+                      <span class="text-[11px] font-bold text-[#726c77] uppercase tracking-wider block mb-1">Role</span>
+                      <span class="text-sm font-bold text-[#262428]">Sole UI/UX Designer</span>
+                  </div>
+                  <div>
+                      <span class="text-[11px] font-bold text-[#726c77] uppercase tracking-wider block mb-1">Scope</span>
+                      <span class="text-sm font-bold text-[#262428]">Recipe Web Application</span>
+                  </div>
+                  <div>
+                      <span class="text-[11px] font-bold text-[#726c77] uppercase tracking-wider block mb-1">Methodology</span>
+                      <span class="text-sm font-bold text-[#262428]">Surveys &amp; User Interviews</span>
+                  </div>
+                  <div>
+                      <span class="text-[11px] font-bold text-[#726c77] uppercase tracking-wider block mb-1">Designer</span>
+                      <span class="text-sm font-bold text-[#262428]">Pavithra S.</span>
+                  </div>
+              </div>
+          </div>
+      </section>
+
+      <div class="max-w-[1240px] mx-auto w-full px-6 py-12">
+          
+          <!-- 2. Strategic Foundations & Scope -->
+          <section class="section-header" style="margin-bottom: 56px;">
+              <span class="section-tag">Strategic Foundations</span>
+              <h1 class="section-title">Problem Statement &amp; Product Scope</h1>
+              <p class="section-subtitle">
+                  Defining core cooking friction points, culinary research insights, and boundaries for the website concept.
+              </p>
+
+              <div class="strategy-grid">
+                  <div class="strategy-card bg-pink hover-target">
+                      <div>
+                          <span class="strategy-tag">Problem Statement</span>
+                          <h3 class="strategy-title">Pantry Waste &amp; Cluttered Recipes</h3>
+                          <p class="strategy-desc">
+                              The current food &amp; recipe sharing webs present fragmented step-by-step instructions, poor ingredient matching, and lack effective filtering for dietary preferences, leading to meal decision paralysis and kitchen waste.
+                          </p>
+                      </div>
+                  </div>
+
+                  <div class="strategy-card bg-lavender hover-target">
+                      <div>
+                          <span class="strategy-tag">Design Opportunity</span>
+                          <h3 class="strategy-title">Unified Culinary Space</h3>
+                          <p class="strategy-desc">
+                              A clean ecosystem combining ingredient-based smart discovery, distraction-free cooking modes, verified user reviews, and effortless community recipe uploading.
+                          </p>
+                      </div>
+                  </div>
+
+                  <div class="strategy-card bg-peach hover-target">
+                      <div>
+                          <span class="strategy-tag">How Might We?</span>
+                          <h3 class="strategy-title">Simplifying Home Cooking</h3>
+                          <p class="strategy-desc">
+                              How might we help home cooks effortlessly find meals based on available ingredients while building an engaging platform for recipe creators to share their culinary passion?
+                          </p>
+                      </div>
+                  </div>
+
+                  <div class="strategy-card bg-green hover-target" style="grid-column: 1 / -1;">
+                      <div>
+                          <span class="strategy-tag">Product Scope</span>
+                          <h3 class="strategy-title">FeastFinder Ecosystem</h3>
+                          <p class="strategy-desc">
+                              The web platform scope centers on resolving ingredient discovery gaps, optimizing recipe detail views with interactive checkboxes/scaling, streamlining community submission flows, and structuring intuitive category navigation.
+                          </p>
+                      </div>
+                  </div>
+              </div>
+          </section>
+
+          <!-- 3. UX Research, Persona, Empathy Map & IA -->
+          <section id="research" class="py-12 bg-[#ffffff] border-y border-[rgba(38,36,40,0.06)] rounded-3xl p-8 mb-16 shadow-sm space-y-12">
+              <div class="max-w-6xl mx-auto">
+                  <div class="max-w-2xl mb-10">
+                      <span class="text-xs font-bold uppercase tracking-widest text-[#726c77] bg-[#e8e1f5] px-3.5 py-1 rounded-full">UX Research &amp; Target Audience</span>
+                      <h2 class="text-3xl md:text-4xl font-bold text-[#262428] mt-3">Target Audience &amp; Survey Data</h2>
+                      <p class="text-[#726c77] mt-2 text-sm md:text-base">
+                          Understanding user behaviors and cooking habits through quantitative survey insights and audience segmentations.
+                      </p>
+                  </div>
+
+                  <!-- Quantitative Data / Demographics Grid -->
+                  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                      <div class="bg-[#fbfaf8] p-6 rounded-2xl border border-[rgba(38,36,40,0.08)]">
+                          <h3 class="font-bold text-base text-[#262428] mb-4 flex items-center gap-2">
+                              <i class="fa-solid fa-users text-sm text-[#726c77]"></i> Demographics &amp; Audience Segments
+                          </h3>
+                          <div class="space-y-4">
+                              <div class="p-4 rounded-xl bg-[#white] border border-[rgba(38,36,40,0.06)]">
+                                  <span class="text-xs font-bold text-[#726c77] uppercase tracking-wider block mb-1">Subscribers / Foodies</span>
+                                  <p class="text-xs text-[#262428] leading-relaxed">
+                                      Users seeking new recipes based on available home ingredients, healthy meal prep options, and step-by-step cooking directions.
+                                  </p>
+                              </div>
+                              <div class="p-4 rounded-xl bg-[#white] border border-[rgba(38,36,40,0.06)]">
+                                  <span class="text-xs font-bold text-[#726c77] uppercase tracking-wider block mb-1">Content Creators / Chefs</span>
+                                  <p class="text-xs text-[#262428] leading-relaxed">
+                                      Home cooks and culinary bloggers looking to publish custom recipes, grow an audience, and receive community feedback.
+                                  </p>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="bg-[#fbfaf8] p-6 rounded-2xl border border-[rgba(38,36,40,0.08)] flex flex-col justify-between">
+                          <h3 class="font-bold text-base text-[#262428] mb-4 flex items-center gap-2">
+                              <i class="fa-solid fa-chart-pie text-sm text-[#726c77]"></i> Key Quantitative Metrics
+                          </h3>
+                          <div class="grid grid-cols-2 gap-4">
+                              <div class="p-5 rounded-2xl bg-[#e8e1f5]/60 border border-[rgba(38,36,40,0.08)] text-center">
+                                  <span class="text-3xl font-extrabold text-[#262428] block mb-1">68.4%</span>
+                                  <span class="text-[11px] font-bold text-[#726c77] uppercase tracking-wider">Search recipes by available ingredients</span>
+                              </div>
+                              <div class="p-5 rounded-2xl bg-[#f2dadf]/60 border border-[rgba(38,36,40,0.08)] text-center">
+                                  <span class="text-3xl font-extrabold text-[#262428] block mb-1">52.6%</span>
+                                  <span class="text-[11px] font-bold text-[#726c77] uppercase tracking-wider">Prefer video &amp; visual step guides</span>
+                              </div>
+                              <div class="p-5 rounded-2xl bg-[#dbeadb]/60 border border-[rgba(38,36,40,0.08)] text-center">
+                                  <span class="text-3xl font-extrabold text-[#262428] block mb-1">45%</span>
+                                  <span class="text-[11px] font-bold text-[#726c77] uppercase tracking-wider">Filter meals by dietary restrictions</span>
+                              </div>
+                              <div class="p-5 rounded-2xl bg-[#f5e4d5]/60 border border-[rgba(38,36,40,0.08)] text-center">
+                                  <span class="text-3xl font-extrabold text-[#262428] block mb-1">84%</span>
+                                  <span class="text-[11px] font-bold text-[#726c77] uppercase tracking-wider">Rely on community ratings &amp; reviews</span>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
+                  <!-- User Persona Card -->
+                  <div class="bg-[#fbfaf8] p-8 rounded-3xl border border-[rgba(38,36,40,0.08)] mb-12 shadow-sm">
+                      <div class="flex flex-col md:flex-row items-start gap-8">
+                          <div class="w-full md:w-1/3 text-center md:text-left">
+                              <div class="w-24 h-24 rounded-full bg-[#e8e1f5] mx-auto md:mx-0 flex items-center justify-center text-3xl font-bold text-[#262428] mb-4 border border-[rgba(38,36,40,0.1)]">
+                                  S
+                              </div>
+                              <h3 class="text-xl font-bold text-[#262428]">Sarah</h3>
+                              <span class="text-xs font-bold text-[#726c77] uppercase tracking-wider block mb-3">Working Professional &amp; Home Cook</span>
+                              <p class="text-xs text-[#726c77] leading-relaxed">
+                                  Sarah works full-time and enjoys cooking healthy meals after work. She gets frustrated when recipe sites are cluttered with ads and long blog intro posts instead of clear instructions.
+                              </p>
+                          </div>
+
+                          <div class="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                              <div class="p-4 rounded-xl bg-[#ffffff] border border-[rgba(38,36,40,0.06)]">
+                                  <span class="text-[11px] font-bold text-[#726c77] uppercase tracking-wider block mb-1">Frustrations</span>
+                                  <ul class="text-xs text-[#262428] space-y-1.5 list-disc pl-4">
+                                      <li>Cluttered screens filled with ads</li>
+                                      <li>Difficulty finding recipes with existing pantry items</li>
+                                      <li>Inaccurate preparation &amp; cook time estimates</li>
+                                  </ul>
+                              </div>
+                              <div class="p-4 rounded-xl bg-[#ffffff] border border-[rgba(38,36,40,0.06)]">
+                                  <span class="text-[11px] font-bold text-[#726c77] uppercase tracking-wider block mb-1">Needs &amp; Goals</span>
+                                  <ul class="text-xs text-[#262428] space-y-1.5 list-disc pl-4">
+                                      <li>Quick search by ingredients</li>
+                                      <li>Step-by-step distraction-free cook view</li>
+                                      <li>Saved favorite recipe collections</li>
+                                  </ul>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
+                  <!-- Empathy Map Grid -->
+                  <div class="bg-[#fbfaf8] p-8 rounded-3xl border border-[rgba(38,36,40,0.08)] mb-12 shadow-sm">
+                      <span class="text-xs font-bold uppercase tracking-widest text-[#726c77] bg-[#f2dadf] px-3.5 py-1 rounded-full">User Empathy Map</span>
+                      <h3 class="text-2xl font-bold text-[#262428] mt-3 mb-6">Empathy Mapping Analysis</h3>
+                      
+                      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                          <div class="p-5 rounded-2xl bg-[#e8e1f5]/50 border border-[rgba(38,36,40,0.08)]">
+                              <h4 class="font-bold text-xs uppercase text-[#262428] tracking-wider mb-2"><i class="fa-solid fa-comment mr-1"></i> Says</h4>
+                              <p class="text-xs text-[#726c77] leading-relaxed">"I want to make something fast with what I already have in my kitchen."</p>
+                          </div>
+                          <div class="p-5 rounded-2xl bg-[#f2dadf]/50 border border-[rgba(38,36,40,0.08)]">
+                              <h4 class="font-bold text-xs uppercase text-[#262428] tracking-wider mb-2"><i class="fa-solid fa-brain mr-1"></i> Thinks</h4>
+                              <p class="text-xs text-[#726c77] leading-relaxed">"I hope this recipe doesn't take twice as long as the website claims."</p>
+                          </div>
+                          <div class="p-5 rounded-2xl bg-[#f5e4d5]/50 border border-[rgba(38,36,40,0.08)]">
+                              <h4 class="font-bold text-xs uppercase text-[#262428] tracking-wider mb-2"><i class="fa-solid fa-eye mr-1"></i> Sees</h4>
+                              <p class="text-xs text-[#726c77] leading-relaxed">Unclear ingredient quantities and ad-cluttered blog layouts on traditional sites.</p>
+                          </div>
+                          <div class="p-5 rounded-2xl bg-[#dbeadb]/50 border border-[rgba(38,36,40,0.08)]">
+                              <h4 class="font-bold text-xs uppercase text-[#262428] tracking-wider mb-2"><i class="fa-solid fa-hand-holding-heart mr-1"></i> Does</h4>
+                              <p class="text-xs text-[#726c77] leading-relaxed">Scans recipe cards quickly, checks ratings, and saves dishes to personal bookmarks.</p>
+                          </div>
+                      </div>
+                  </div>
+
+                  <!-- User Flow Architecture -->
+                  <div class="bg-[#fbfaf8] p-8 md:p-10 rounded-3xl border border-[rgba(38,36,40,0.08)] shadow-sm space-y-8">
+                      <div>
+                          <span class="text-xs font-bold uppercase tracking-widest text-[#726c77] bg-[#dbeadb] px-3.5 py-1 rounded-full">User Flow Architecture</span>
+                          <h3 class="text-2xl font-bold text-[#262428] mt-3">Primary User Journey Flow</h3>
+                          <p class="text-xs text-[#726c77] mt-1">From landing page discovery to active step-by-step cooking.</p>
+                      </div>
+
+                      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 text-center">
+                          <div class="p-4 rounded-xl bg-[#ffffff] border border-[rgba(38,36,40,0.08)] shadow-sm space-y-2">
+                              <div class="w-7 h-7 rounded-full bg-[#262428] text-white mx-auto flex items-center justify-center font-bold text-xs">1</div>
+                              <h4 class="font-bold text-xs text-[#262428]">Home Page</h4>
+                              <p class="text-[10px] text-[#726c77]">Search or select food categories.</p>
+                          </div>
+                          <div class="p-4 rounded-xl bg-[#ffffff] border border-[rgba(38,36,40,0.08)] shadow-sm space-y-2">
+                              <div class="w-7 h-7 rounded-full bg-[#262428] text-white mx-auto flex items-center justify-center font-bold text-xs">2</div>
+                              <h4 class="font-bold text-xs text-[#262428]">Recipe Feed</h4>
+                              <p class="text-[10px] text-[#726c77]">Filter by ingredients &amp; diet.</p>
+                          </div>
+                          <div class="p-4 rounded-xl bg-[#ffffff] border border-[rgba(38,36,40,0.08)] shadow-sm space-y-2">
+                              <div class="w-7 h-7 rounded-full bg-[#262428] text-white mx-auto flex items-center justify-center font-bold text-xs">3</div>
+                              <h4 class="font-bold text-xs text-[#262428]">Recipe Detail</h4>
+                              <p class="text-[10px] text-[#726c77]">Review ingredients &amp; time.</p>
+                          </div>
+                          <div class="p-4 rounded-xl bg-[#ffffff] border border-[rgba(38,36,40,0.08)] shadow-sm space-y-2">
+                              <div class="w-7 h-7 rounded-full bg-[#262428] text-white mx-auto flex items-center justify-center font-bold text-xs">4</div>
+                              <h4 class="font-bold text-xs text-[#262428]">Cook Mode</h4>
+                              <p class="text-[10px] text-[#726c77]">Interactive step checkboxes.</p>
+                          </div>
+                          <div class="p-4 rounded-xl bg-[#ffffff] border border-[rgba(38,36,40,0.08)] shadow-sm space-y-2">
+                              <div class="w-7 h-7 rounded-full bg-[#262428] text-white mx-auto flex items-center justify-center font-bold text-xs">5</div>
+                              <h4 class="font-bold text-xs text-[#262428]">Community</h4>
+                              <p class="text-[10px] text-[#726c77]">Share cook snap review.</p>
+                          </div>
+                      </div>
+                  </div>
+
+                  <!-- Information Architecture Blueprint -->
+                  <div class="bg-[#fbfaf8] p-8 md:p-10 rounded-3xl border border-[rgba(38,36,40,0.08)] shadow-sm space-y-6 mt-8">
+                      <div>
+                          <span class="text-xs font-bold uppercase tracking-widest text-[#726c77] bg-[#e8e1f5] px-3.5 py-1 rounded-full">System Architecture</span>
+                          <h3 class="text-2xl font-bold text-[#262428] mt-3">Information Architecture Map</h3>
+                      </div>
+
+                      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                          <div class="p-4 rounded-xl bg-[#e8e1f5]/50 border border-[rgba(38,36,40,0.08)] space-y-2">
+                              <h4 class="font-bold text-xs text-[#262428] border-b border-[rgba(38,36,40,0.1)] pb-1">1. Home Page Navigation</h4>
+                              <ul class="text-[11px] text-[#726c77] space-y-1">
+                                  <li>• Search &amp; Filter Bar</li>
+                                  <li>• Featured Categories</li>
+                                  <li>• Trending Recipes</li>
+                                  <li>• Community Highlights</li>
+                              </ul>
+                          </div>
+
+                          <div class="p-4 rounded-xl bg-[#f2dadf]/50 border border-[rgba(38,36,40,0.08)] space-y-2">
+                              <h4 class="font-bold text-xs text-[#262428] border-b border-[rgba(38,36,40,0.1)] pb-1">2. Recipe Discovery</h4>
+                              <ul class="text-[11px] text-[#726c77] space-y-1">
+                                  <li>• Ingredient-based Search</li>
+                                  <li>• Dietary Filters (Vegan, GF)</li>
+                                  <li>• Meal Type (Breakfast, Lunch)</li>
+                                  <li>• Preparation Time Filter</li>
+                              </ul>
+                          </div>
+
+                          <div class="p-4 rounded-xl bg-[#f5e4d5]/50 border border-[rgba(38,36,40,0.08)] space-y-2">
+                              <h4 class="font-bold text-xs text-[#262428] border-b border-[rgba(38,36,40,0.1)] pb-1">3. Recipe Detail Page</h4>
+                              <ul class="text-[11px] text-[#726c77] space-y-1">
+                                  <li>• Dynamic Serving Calculator</li>
+                                  <li>• Interactive Ingredient Checkbox</li>
+                                  <li>• Hands-Free Cook Mode</li>
+                                  <li>• Nutrition Facts Breakdown</li>
+                              </ul>
+                          </div>
+
+                          <div class="p-4 rounded-xl bg-[#dbeadb]/50 border border-[rgba(38,36,40,0.08)] space-y-2">
+                              <h4 class="font-bold text-xs text-[#262428] border-b border-[rgba(38,36,40,0.1)] pb-1">4. Community &amp; Profile</h4>
+                              <ul class="text-[11px] text-[#726c77] space-y-1">
+                                  <li>• Drag-and-Drop Recipe Upload</li>
+                                  <li>• Cook Snap Reviews &amp; Photos</li>
+                                  <li>• Saved Favorites Collections</li>
+                                  <li>• Author Profiles &amp; Following</li>
+                              </ul>
+                          </div>
+                      </div>
+                  </div>
+
+              </div>
+          </section>
+
+          <!-- 4. Feature Breakdown Section -->
+          <header class="section-header">
+              <span class="section-tag">Feature Concepts</span>
+              <h1 class="section-title">Key Feature Breakdown</h1>
+              <p class="section-subtitle">
+                  Addressing home cooks' biggest frustrations with intuitive, user-centered culinary solutions.
+              </p>
+          </header>
+
+          <div class="filter-container">
+              <button class="filter-btn active hover-target" onclick="filterFeatures('all', event)">All Features</button>
+              <button class="filter-btn hover-target" onclick="filterFeatures('discovery', event)">Recipe Discovery</button>
+              <button class="filter-btn hover-target" onclick="filterFeatures('cooking', event)">Cook Mode &amp; Videos</button>
+              <button class="filter-btn hover-target" onclick="filterFeatures('community', event)">Community &amp; Uploads</button>
+          </div>
+
+          <div class="feature-grid" id="featureGrid">
+
+              <!-- Feature 01 (Lavender Card) -->
+              <article class="feature-card card-lavender hover-target" data-category="discovery">
+                  <div class="card-top">
+                      <span class="card-number">01</span>
+                      <span class="card-tag">Smart Discovery</span>
+                  </div>
+                  <h2 class="feature-heading">Pantry-Based Recipe Finder</h2>
+                  <p class="feature-explanation">
+                      An intelligent search tool allowing users to input ingredients currently in their fridge and pantry, surfacing instant recipe matches to reduce food waste and grocery hassle.
+                  </p>
+              </article>
+
+              <!-- Feature 02 (Pink Card) -->
+              <article class="feature-card card-pink hover-target" data-category="cooking">
+                  <div class="card-top">
+                      <span class="card-number">02</span>
+                      <span class="card-tag">Hands-Free Cooking</span>
+                  </div>
+                  <h2 class="feature-heading">Video &amp; Step-by-Step Guides</h2>
+                  <p class="feature-explanation">
+                      Distraction-free cook mode featuring embedded HD video previews, interactive step checkboxes, dynamic timer widgets, and a keep-awake screen setting for seamless cooking.
+                  </p>
+              </article>
+
+              <!-- Feature 03 (Peach Card) -->
+              <article class="feature-card card-peach hover-target" data-category="community">
+                  <div class="card-top">
+                      <span class="card-number">03</span>
+                      <span class="card-tag">Community Hub</span>
+                  </div>
+                  <h2 class="feature-heading">Recipe Sharing &amp; Creator Studio</h2>
+                  <p class="feature-explanation">
+                      A drag-and-drop recipe builder empowering foodies and creators to publish custom dishes, upload step-by-step photos, and build an active community following.
+                  </p>
+              </article>
+
+              <!-- Feature 04 (Green Card) -->
+              <article class="feature-card card-green hover-target" data-category="discovery">
+                  <div class="card-top">
+                      <span class="card-number">04</span>
+                      <span class="card-tag">World Cuisines</span>
+                  </div>
+                  <h2 class="feature-heading">Global Variety &amp; Dietary Filters</h2>
+                  <p class="feature-explanation">
+                      Explore curated recipe collections spanning top global cuisines—from Authentic Asian to Mediterranean—with instant filters for Vegan, Gluten-Free, Keto, and prep-time needs.
+                  </p>
+              </article>
+
+          </div>
+
+         <!-- 5. Figma High-Fidelity Website Screens Section (Wide Scrollable Format) -->
+          <section class="figma-screens-section">
+              <header class="section-header">
+                  <span class="section-tag">UI Showcase</span>
+                  <h1 class="section-title">Figma High-Fidelity Website Mockups</h1>
+                  <p class="section-subtitle">
+                      Full-width desktop website frames featuring Discover Your Favorite Recipes and Explore, Read & Save Recipe Articles. Scroll within each container to view the complete layouts.
+                  </p>
+              </header>
+
+              <div class="figma-screens-grid">
+
+                  <!-- Screen Card 01 -->
+                  <div class="screen-card hover-target">
+                      <div class="screen-header-meta">
+                          <span class="screen-title">01.Discover Your Favorite Recipes</span>
+                      </div>
+                      <div class="screen-image-container">
+                          <img src="C:\Users\pavit\Downloads\Home.png" alt="Discover Your Favorite Recipes" class="figma-screen-img" />
+                      </div>
+                      <p class="screen-caption">Explore the Feast Finder homepage to discover and choose your preferred recipes from a variety of categories based on your tastes and interests.</p>
+                  </div>
+
+                  <!-- Screen Card 02 -->
+                  <div class="screen-card hover-target">
+                      <div class="screen-header-meta">
+                          <span class="screen-title">02. Explore, Read & Save Recipe Articles</span>
+                      </div>
+                      <div class="screen-image-container">
+                          <img src="C:\Users\pavit\Downloads\Article.png" alt="Explore, Read & Save Recipe Articles" class="figma-screen-img" />
+                      </div>
+                      <p class="screen-caption">Discover food and recipe articles, read your favorite ones, and easily share or save them for future reference.</p>
+                  </div>
+
+                  <!-- Screen Card 03 -->
+                  <div class="screen-card hover-target">
+                      <div class="screen-header-meta">
+                          <span class="screen-title">03. Share Your Special Recipes</span>
+                      </div>
+                      <div class="screen-image-container">
+                          <img src="C:\Users\pavit\Downloads\Submit Recipe.png" alt="Share Your Special Recipes" class="figma-screen-img" />
+                      </div>
+                      <p class="screen-caption">Upload your favorite or unique recipes and share them with the Feast Finder community to inspire others and exchange cooking ideas.</p>
+                  </div>
+
+                  <!-- Screen Card 04 -->
+                  <div class="screen-card hover-target">
+                      <div class="screen-header-meta">
+                          <span class="screen-title">04. Cook Your Favorite Way</span>
+                      </div>
+                      <div class="screen-image-container">
+                          <img src="C:\Users\pavit\Downloads\Channa Masala.png"alt="Cook Your Favorite Way" class="figma-screen-img" />
+                      </div>
+                      <p class="screen-caption">Explore the detailed view of your favorite recipe, follow the written instructions, prepare the dish yourself, or watch a video tutorial based on your preferred cooking style.</p>
+                  </div>
+
+              </div>
+          </section>
+
+          <!-- 6. Conclusion Banner -->
+          <section class="conclusion-section">
+              <div class="conclusion-container">
+                  <span class="conclusion-badge">Case Study Conclusion</span>
+                  <h2 class="conclusion-title">Crafting Joyful Digital Culinary Experiences</h2>
+                  <p class="conclusion-desc">
+                     FeastFinder demonstrates how user-centered wireframing and empathetic visual design can turn everyday meal preparation into a delightful, social experience..
+                  </p>
+                  <div class="conclusion-actions">
+                      <a href="index.html" class="conclusion-btn primary-btn hover-target">Return to Portfolio</a>
+                      <a href="index.html#contact" class="conclusion-btn secondary-btn hover-target">Discuss Product Design Roles</a>
+                  </div>
+              </div>
+          </section>
+      </div>
+  </main>
+
+  <!-- Interactive Scripts -->
+ <!-- Working Custom Cursor Script -->
+<script>
+  const cursorDot = document.getElementById('cursor-dot');
+  const cursorRing = document.getElementById('cursor-ring');
+  
+  let mouseX = 0, mouseY = 0;
+  let ringX = 0, ringY = 0;
+
+  window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    cursorDot.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
+  });
+
+  function renderCursor() {
+    ringX += (mouseX - ringX) * 0.2;
+    ringY += (mouseY - ringY) * 0.2;
+    cursorRing.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
+    requestAnimationFrame(renderCursor);
+  }
+  
+  requestAnimationFrame(renderCursor);
+
+  // Hover animations for interactive components
+  const hoverTargets = document.querySelectorAll('a, button, input, textarea');
+  
+  hoverTargets.forEach(target => {
+    target.addEventListener('mouseenter', () => {
+      cursorRing.style.width = '64px';
+      cursorRing.style.height = '64px';
+      cursorRing.style.backgroundColor = 'rgba(232, 225, 245, 0.6)';
+      cursorRing.style.borderColor = 'rgba(38, 36, 40, 0.4)';
+    });
+    
+    target.addEventListener('mouseleave', () => {
+      cursorRing.style.width = '42px';
+      cursorRing.style.height = '42px';
+      cursorRing.style.backgroundColor = 'rgba(232, 225, 245, 0.35)';
+      cursorRing.style.borderColor = 'rgba(38, 36, 40, 0.25)';
+    });
+  });
+</script>
+
+
+      
+     <!-- 5. FOOTER -->
+    <footer class="bg-[#ffffff] border-t border-[rgba(38,36,40,0.08)] py-8 relative z-10">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-2">
+                <span class="font-bold text-sm text-[#262428]">Pavithra Design Journey</span>
+                <span class="text-xs text-[#726c77]">© <span id="current-year"></span> All Rights Reserved</span>
+            </div>
+
+            <div class="flex items-center gap-6 text-xs text-[#726c77]">
+                <a href="index.html#hero" onclick="showMainLanding()" class="hover:text-[#262428] hover-target">Home</a>
+                <a href=" index.html#about" onclick="showMainLanding('about')" class="hover:text-[#262428] hover-target">About</a>
+                <a href="index.html#work" onclick="showMainLanding('work')" class="hover:text-[#262428] hover-target">Work</a>
+                <a href="index.html#contact" onclick="showMainLanding('contact')" class="hover:text-[#262428] hover-target">Contact</a>
+            </div>
+        </div>
+    </footer>
+<script>
+
+</body>
+</html>

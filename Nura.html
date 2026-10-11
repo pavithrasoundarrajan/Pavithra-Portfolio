@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NURA AI Doctor — UI/UX Case Study | Pavithra Design Journey</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --background: #fbfaf8;
+            --text: #262428;
+            --muted: #726c77;
+            --lavender: #e8e1f5;
+            --pink: #f2dadf;
+            --peach: #f5e4d5;
+            --green: #dbeadb;
+            --white: #ffffff;
+            --border: rgba(38, 36, 40, 0.08);
+            --shadow-sm: 0 4px 12px rgba(38, 36, 40, 0.03);
+            --shadow-md: 0 8px 24px rgba(38, 36, 40, 0.06);
+            --shadow-lg: 0 16px 36px rgba(38, 36, 40, 0.1);
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+            cursor: none;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- Custom Cursor --- */
+        #cursor-dot {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 8px;
+            height: 8px;
+            background-color: var(--text);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, background-color 0.2s, opacity 0.2s;
+        }
+
+        #cursor-ring {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 42px;
+            height: 42px;
+            border: 1px solid rgba(38, 36, 40, 0.25);
+            background: rgba(232, 225, 245, 0.35);
+            backdrop-filter: blur(2px);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: transform 0.15s cubic-bezier(0.23, 1, 0.32, 1), width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s;
+        }
+
+        /* --- Ambient Background Animations --- */
+        @keyframes floatUp {
+            0% {
+                transform: translateY(105vh) scale(0.8) rotate(0deg);
+                opacity: 0;
+            }
+            15% { opacity: 0.6; }
+            85% { opacity: 0.6; }
+            100% {
+                transform: translateY(-20vh) scale(1.15) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        #bubbles-container {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+            isolation: isolate;
+        }
+
+        .ambient-bubble {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            filter: blur(1px);
+            z-index: 0;
+            animation: floatUp linear infinite;
+        }
+
+        header, main {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Case study specific styling */
+        .section-header {
+            margin-bottom: 40px;
+        }
+
+        .section-tag {
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1.6px;
+            font-weight: 800;
+            color: var(--muted);
+            margin-bottom: 12px;
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--white);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .section-title {
+            font-size: 40px;
+            font-weight: 800;
+            letter-spacing: -0.6px;
+            color: var(--text);
+            margin-bottom: 16px;
+            line-height: 1.25;
+        }
+
+        .section-subtitle {
+            font-size: 16px;
+            color: var(--muted);
+            max-width: 820px;
+            font-weight: 400;
+            line-height: 1.65;
+        }
+
+        .strategy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 28px;
+            margin-top: 36px;
+            margin-bottom: 64px;
+        }
+
+        .strategy-card {
+            border-radius: 24px;
+            padding: 32px 28px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .strategy-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .bg-pink { background-color: var(--pink); }
+        .bg-lavender { background-color: var(--lavender); }
+        .bg-peach { background-color: var(--peach); }
+        .bg-green { background-color: var(--green); }
+
+        .strategy-tag {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text);
+            opacity: 0.7;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .strategy-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+
+        .strategy-desc {
+            font-size: 14.5px;
+            color: var(--text);
+            opacity: 0.9;
+            line-height: 1.65;
+        }
+
+        .filter-container {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: var(--white);
+            border: 1px solid var(--border);
+            color: var(--muted);
+            padding: 12px 22px;
+            border-radius: 14px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .filter-btn:hover {
+            color: var(--text);
+            border-color: var(--text);
+            transform: translateY(-2px);
+        }
+
+        .filter-btn.active {
+            background: var(--text);
+            color: var(--white);
+            border-color: var(--text);
+            box-shadow: var(--shadow-md);
+        }
+
+        .figma-screens-section {
+            margin-top: 80px;
+            padding-top: 56px;
+            border-top: 2px dashed var(--border);
+        }
+
+        /* Responsive 3-column Grid for Figma Screens */
+        .figma-screens-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 32px;
+            margin-top: 36px;
+            margin-bottom: 64px;
+        }
+
+        .screen-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            padding: 20px;
+            width: 100%;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.35s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .screen-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
+            border-color: rgba(38, 36, 40, 0.15);
+        }
+
+        .screen-header-meta {
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .screen-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        /* Scrollable Mobile View Frame (390px wide aspect ratio with max height) */
+        .screen-image-container {
+            width: 100%;
+            height: 640px;
+            overflow-y: auto;
+            border-radius: 20px;
+            background-color: #f2edf8;
+            border: 1px solid var(--border);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            position: relative;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.03);
+        }
+
+        .screen-image-container::-webkit-scrollbar {
+            width: 5px;
+        }
+        .screen-image-container::-webkit-scrollbar-thumb {
+            background-color: rgba(114, 108, 119, 0.4);
+            border-radius: 10px;
+        }
+
+        .figma-screen-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 18px;
+        }
+
+        .screen-caption {
+            margin-top: 14px;
+            font-size: 13px;
+            color: var(--muted);
+            text-align: center;
+            line-height: 1.5;
+            width: 100%;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 32px;
+            margin-bottom: 60px;
+        }
+
+        .feature-card {
+            background-color: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 36px 32px;
+            position: relative;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            transition: height 0.3s ease;
+        }
+
+        .card-pink::before { background-color: #e0b2bb; }
+        .card-lavender::before { background-color: #cbbbe3; }
+        .card-peach::before { background-color: #e7c2a7; }
+        .card-green::before { background-color: #b3d5b3; }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .card-number {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--text);
+            padding: 6px 14px;
+            border-radius: 10px;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+
+        .card-pink .card-number { background: var(--pink); }
+        .card-lavender .card-number { background: var(--lavender); }
+        .card-peach .card-number { background: var(--peach); }
+        .card-green .card-number { background: var(--green); }
+
+        .card-tag {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--muted);
+        }
+
+        .feature-heading {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 16px;
+            line-height: 1.3;
+        }
+
+        .feature-explanation {
+            font-size: 14.5px;
+            color: var(--muted);
+            line-height: 1.65;
+            margin-bottom: 0;
+            transition: color 0.3s ease;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-top: 18px;
+            margin-bottom: 0;
+        }
+
+        .feature-list li {
+            position: relative;
+            padding-left: 22px;
+            font-size: 14px;
+            color: var(--muted);
+            margin-bottom: 10px;
+            line-height: 1.55;
+            transition: color 0.3s ease;
+        }
+
+        .feature-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        .feature-list li::before {
+            content: "•";
+            position: absolute;
+            left: 4px;
+            color: var(--text);
+            font-size: 18px;
+            line-height: 1;
+            top: 1px;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            border-color: rgba(38, 36, 40, 0.15);
+        }
+
+        .feature-card:hover::before {
+            height: 100%;
+            z-index: 0;
+            opacity: 0.15;
+        }
+
+        .feature-card > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-lavender:hover { background-color: var(--lavender); }
+        .card-pink:hover { background-color: var(--pink); }
+        .card-peach:hover { background-color: var(--peach); }
+        .card-green:hover { background-color: var(--green); }
+
+        .feature-card:hover .feature-explanation,
+        .feature-card:hover .feature-list li {
+            color: var(--text);
+        }
+
+        .feature-card:hover .card-number {
+            background: var(--white);
+            color: var(--text);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .feature-card.is-hidden {
+            display: none;
+        }
+
+        .conclusion-section {
+            background-color: var(--lavender);
+            border: 1px solid var(--border);
+            border-radius: 32px;
+            padding: 72px 32px;
+            text-align: center;
+            margin-top: 64px;
+            margin-bottom: 32px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .conclusion-container {
+            max-width: 720px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .conclusion-badge {
+            display: inline-block;
+            padding: 6px 18px;
+            background: var(--white);
+            color: var(--text);
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .conclusion-title {
+            font-size: 34px;
+            font-weight: 800;
+            color: var(--text);
+            letter-spacing: -0.5px;
+            line-height: 1.25;
+        }
+
+        .conclusion-desc {
+            font-size: 16px;
+            color: var(--muted);
+            line-height: 1.7;
+            max-width: 620px;
+        }
+
+        .conclusion-actions {
+            display: flex;
+            gap: 16px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .conclusion-btn {
+            padding: 14px 28px;
+            border-radius: 16px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .primary-btn {
+            background: var(--text);
+            color: var(--white);
+            border: 1px solid var(--text);
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            opacity: 0.92;
+        }
+
+        .secondary-btn {
+            background: var(--white);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .secondary-btn:hover {
+            border-color: var(--text);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        @media (max-width: 1024px) {
+            .figma-screens-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 0;
+            }
+            .section-title {
+                font-size: 30px;
+            }
+            .strategy-grid,
+            .feature-grid,
+            .figma-screens-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+            .conclusion-section {
+                padding: 48px 20px;
+                border-radius: 24px;
+            }
+            .conclusion-title {
+                font-size: 26px;
+            }
+            .conclusion-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+            .conclusion-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body class="selection:bg-[#f2dadf] selection:text-[#262428] min-h-screen flex flex-col justify-between relative">
+
+  <!-- AMBIENT FLOATING BUBBLES BACKGROUND -->
+  <div id="bubbles-container">
+    <div class="ambient-bubble bg-[#e8e1f5]/60 w-32 h-32 left-[8%]" style="animation-duration: 22s; animation-delay: 0s;"></div>
+    <div class="ambient-bubble bg-[#f2dadf]/50 w-48 h-48 left-[25%]" style="animation-duration: 28s; animation-delay: 3s;"></div>
+    <div class="ambient-bubble bg-[#f5e4d5]/60 w-24 h-24 left-[50%]" style="animation-duration: 18s; animation-delay: 1s;"></div>
+    <div class="ambient-bubble bg-[#dbeadb]/60 w-40 h-40 left-[72%]" style="animation-duration: 25s; animation-delay: 5s;"></div>
+    <div class="ambient-bubble bg-[#e8e1f5]/50 w-56 h-56 left-[88%]" style="animation-duration: 32s; animation-delay: 2s;"></div>
+    <div class="ambient-bubble bg-[#f2dadf]/60 w-28 h-28 left-[38%]" style="animation-duration: 20s; animation-delay: 8s;"></div>
+  </div>
+
+  <!-- Custom Interactive Cursor -->
+  <div id="cursor-dot"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- Header / Navigation -->
+  <header class="sticky top-0 z-50 bg-[#fbfaf8]/80 backdrop-blur-md border-b border-[rgba(38,36,40,0.06)] transition-all duration-300">
+      <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between relative z-10">
+          <!-- Brand Logo -->
+          <a href="my portfolio.html#hero" class="group flex items-center gap-3 hover-target">
+              <div class="w-10 h-10 rounded-full bg-[#e8e1f5] flex items-center justify-center font-bold text-[#262428] border border-[rgba(38,36,40,0.08)] group-hover:scale-105 transition-transform duration-300">
+                  P
+              </div>
+              <div>
+                  <span class="font-bold text-lg tracking-tight block text-[#262428]">Pavithra</span>
+                  <span class="text-[10px] text-[#726c77] tracking-widest uppercase -mt-1 block font-medium">Design Journey</span>
+              </div>
+          </a>
+
+          <!-- Navigation Links -->
+          <nav class="hidden md:flex items-center gap-8">
+              <a href="index.html#about" class="text-sm font-medium text-[#726c77] hover:text-[#262428] transition-colors hover-target py-1">About</a>
+              <a href="index.html#work" class="text-sm font-medium text-[#726c77] hover:text-[#262428] transition-colors hover-target py-1">Work</a>
+              <a href="index.html#contact" class="hover-target inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#f2dadf] hover:bg-[#e8e1f5] text-[#262428] font-semibold text-sm transition-all duration-300 shadow-sm border border-[rgba(38,36,40,0.06)]">
+                  <span>Let's Connect</span>
+                  <i class="fa-solid fa-arrow-right text-xs"></i>
+              </a>
+          </nav>
+
+          <!-- Mobile Menu Toggle Button -->
+          <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="md:hidden p-2 text-[#262428] focus:outline-none hover-target">
+              <i class="fa-solid fa-bars text-xl" id="menu-icon"></i>
+          </button>
+      </div>
+
+      <!-- Mobile Navigation Menu -->
+      <div id="mobile-menu" class="hidden md:hidden bg-[#fbfaf8] border-b border-[rgba(38,36,40,0.08)] px-6 py-4 flex flex-col gap-3">
+          <a href="index.html#about" onclick="toggleMobileMenu()" class="text-base font-medium text-[#262428] py-2 border-b border-gray-100">About</a>
+          <a href="index.html#work" onclick="toggleMobileMenu()" class="text-base font-medium text-[#262428] py-2 border-b border-gray-100">Work</a>
+          <a href="index.html#contact" onclick="toggleMobileMenu()" class="text-base font-medium text-[#262428] py-2 text-center rounded-full bg-[#f2dadf] mt-2">Let's Connect</a>
+      </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-grow">
+      
+      <!-- Back Button Section -->
+      <div class="max-w-6xl mx-auto px-6 pt-8">
+          <a href="index.html#work" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#ffffff] hover:bg-[#e8e1f5] text-[#262428] border border-[rgba(38,36,40,0.1)] font-semibold text-sm transition-all shadow-sm mb-4 hover-target">
+            <i class="fa-solid fa-arrow-left text-xs"></i>
+            <span>Back to Projects</span>
+          </a>
+      </div>
+
+      <!-- Overview Section -->
+      <section id="overview" class="py-16 md:py-24 border-b border-[rgba(38,36,40,0.06)] bg-gradient-to-b from-[#e8e1f5]/30 via-transparent to-transparent">
+          <div class="max-w-6xl mx-auto px-6">
+              <div class="flex flex-wrap items-center gap-3 mb-6">
+                  <span class="px-3.5 py-1 rounded-full bg-[#dbeadb] text-[#262428] text-xs font-bold border border-[rgba(38,36,40,0.08)]">
+                      <i class="fa-solid fa-heart-pulse mr-1"></i> Healthcare UX Concept
+                  </span>
+                  <span class="px-3.5 py-1 rounded-full bg-[#f2dadf] text-[#262428] text-xs font-bold border border-[rgba(38,36,40,0.08)]">
+                      Case Study #01
+                  </span>
+                  <span class="px-3.5 py-1 rounded-full bg-[#f5e4d5] text-[#262428] text-xs font-bold border border-[rgba(38,36,40,0.08)]">
+                      8 Core Features
+                  </span>
+              </div>
+
+              <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-[#262428] leading-tight mb-6">
+                  NURA: AI Doctor — Navigating the Digital Treatment Journey
+              </h1>
+
+              <p class="text-lg md:text-xl text-[#726c77] max-w-3xl leading-relaxed mb-10">
+                  An end-to-end product design exploration investigating how digital healthcare platforms can make ongoing medical treatment, AI triage, continuous tracking, emergency alerts, and human care team handoffs transparent, reassuring, and effortless.
+              </p>
+
+              <!-- Project Meta Details Grid -->
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 bg-[#ffffff] rounded-2xl border border-[rgba(38,36,40,0.08)] shadow-sm">
+                  <div>
+                      <span class="text-[11px] font-bold text-[#726c77] uppercase tracking-wider block mb-1">Role</span>
+                      <span class="text-sm font-bold text-[#262428]">Solo Product Designer</span>
+                  </div>
+                  <div>
+                      <span class="text-[11px] font-bold text-[#726c77] uppercase tracking-wider block mb-1">Scope</span>
+                      <span class="text-sm font-bold text-[#262428]">Mobile App UX/UI Concept</span>
+                  </div>
+                  <div>
+                      <span class="text-[11px] font-bold text-[#726c77] uppercase tracking-wider block mb-1">Focus Areas</span>
+                      <span class="text-sm font-bold text-[#262428]">AI + Clinical Workflows</span>
+                  </div>
+                  <div>
+                      <span class="text-[11px] font-bold text-[#726c77] uppercase tracking-wider block mb-1">Designer</span>
+                      <span class="text-sm font-bold text-[#262428]">Pavithra S.</span>
+                  </div>
+              </div>
+          </div>
+      </section>
+
+      <!-- Strategic Foundations / Product Scope Section -->
+      <div class="max-w-6xl mx-auto px-6 py-12">
+          <section class="section-header" style="margin-bottom: 56px;">
+              <span class="section-tag">Strategic Foundations</span>
+              <h1 class="section-title">Problem Statement & Product Scope</h1>
+              <p class="section-subtitle">
+                  Defining the core patient friction points, design opportunity, framing questions, and product boundaries prior to feature exploration.
+              </p>
+
+              <div class="strategy-grid">
+                  <div class="strategy-card bg-pink">
+                      <div>
+                          <span class="strategy-tag">Problem Statement</span>
+                          <h3 class="strategy-title">Navigating Digital Care Complexity</h3>
+                          <p class="strategy-desc">
+                              Patients using digital healthcare services can find it difficult to understand their overall treatment journey, know what they need to do next, and navigate between AI guidance and human support.
+                          </p>
+                      </div>
+                  </div>
+
+                  <div class="strategy-card bg-lavender">
+                      <div>
+                          <span class="strategy-tag">Design Opportunity</span>
+                          <h3 class="strategy-title">Unified Treatment Experience</h3>
+                          <p class="strategy-desc">
+                              There is an opportunity to create a patient-centered healthcare experience that brings treatment progress, next steps, personalized guidance, and appropriate support into one clear journey.
+                          </p>
+                      </div>
+                  </div>
+
+                  <div class="strategy-card bg-peach">
+                      <div>
+                          <span class="strategy-tag">How Might We?</span>
+                          <h3 class="strategy-title">Clarity & Access</h3>
+                          <p class="strategy-desc">
+                              How might we make an ongoing healthcare journey clearer and easier to navigate while helping patients understand their next steps and access the right support at the right time?
+                          </p>
+                      </div>
+                  </div>
+
+                  <div class="strategy-card bg-green" style="grid-column: 1 / -1;">
+                      <div>
+                          <span class="strategy-tag">Product Scope</span>
+                          <h3 class="strategy-title">Patient-Facing Treatment Journey</h3>
+                          <p class="strategy-desc">
+                              For this concept, I will focus on the patient-facing treatment journey rather than attempting to design an entire healthcare platform. The experience will help patients understand their current treatment stage, identify their next steps, receive personalized guidance, track progress, and access appropriate support.
+                          </p>
+                      </div>
+                  </div>
+              </div>
+          </section>
+      </div>
+
+      <!-- Research Section -->
+      <section id="research" class="py-20 bg-[#ffffff] border-y border-[rgba(38,36,40,0.06)]">
+          <div class="max-w-6xl mx-auto px-6">
+              <div class="max-w-2xl mb-12">
+                  <span class="text-xs font-bold uppercase tracking-widest text-[#726c77] bg-[#e8e1f5] px-3.5 py-1 rounded-full">Primary Market Research</span>
+                  <h2 class="text-3xl md:text-4xl font-bold text-[#262428] mt-3">Competitor & Ecosystem Analysis</h2>
+                  <p class="text-[#726c77] mt-2 text-sm md:text-base">
+                      To ground NURA in real-world operational challenges, I conducted deep-dive research into <strong>AIOS Medical</strong>, <strong>Twin Health</strong>, and <strong>Sword Health</strong>.
+                  </p>
+              </div>
+
+              <!-- Comparison Table Matrix -->
+              <div class="overflow-x-auto rounded-2xl border border-[rgba(38,36,40,0.08)] bg-[#fbfaf8] mb-12 shadow-sm">
+                  <table class="w-full text-left border-collapse min-w-[700px]">
+                      <thead>
+                          <tr class="bg-[#262428] text-[#ffffff] text-xs uppercase tracking-wider">
+                              <th class="p-4 w-1/4">Research Area</th>
+                              <th class="p-4 w-1/4 bg-[#353238]">AIOS Medical</th>
+                              <th class="p-4 w-1/4">Twin Health</th>
+                              <th class="p-4 w-1/4 bg-[#353238]">Sword Health</th>
+                          </tr>
+                      </thead>
+                      <tbody class="text-xs md:text-sm text-[#262428] divide-y divide-[rgba(38,36,40,0.08)]">
+                          <tr>
+                              <td class="p-4 font-bold bg-[#f2dadf]/30">Product Focus</td>
+                              <td class="p-4">Full-stack AI healthcare platform centered around an AI doctor & clinic infrastructure.</td>
+                              <td class="p-4">AI-powered digital platform focused primarily on metabolic health & diabetes.</td>
+                              <td class="p-4">AI Care platform covering musculoskeletal, women's, cardiometabolic & mental health.</td>
+                          </tr>
+                          <tr>
+                              <td class="p-4 font-bold bg-[#e8e1f5]/30">Target Users</td>
+                              <td class="p-4">Patients/Consumers alongside internal clinicians, operations, and care teams.</td>
+                              <td class="p-4">Patients managing chronic metabolic conditions and daily biomarkers.</td>
+                              <td class="p-4">Patients needing digital physical therapy, mental health, and specialized recovery.</td>
+                          </tr>
+                          <tr>
+                              <td class="p-4 font-bold bg-[#f5e4d5]/30">AI Guidance Mechanism</td>
+                              <td class="p-4">Central autonomous AI doctor for triage, continuous care, and direct prescribing.</td>
+                              <td class="p-4">AI "Digital Twin" analyzing continuous body sensor data for tailored habits.</td>
+                              <td class="p-4">AI motion sensors and conversational guides delivering home therapy sessions.</td>
+                          </tr>
+                          <tr>
+                              <td class="p-4 font-bold bg-[#dbeadb]/30">AI + Human Synergy</td>
+                              <td class="p-4">High automation focus; operational escalation to clinical care team when needed.</td>
+                              <td class="p-4">Hybrid model combining AI insights with human doctors & dedicated health coaches.</td>
+                              <td class="p-4">AI-first sessions backed by assigned physical therapists and care specialists.</td>
+                          </tr>
+                          <tr>
+                              <td class="p-4 font-bold bg-[#e8e1f5]/30">Key Design Takeaway</td>
+                              <td class="p-4">Design for transparency, CX feedback loops, and frictionless customer flows.</td>
+                              <td class="p-4">Translate dense biometric data into simple, reassuring daily micro-actions.</td>
+                              <td class="p-4">Maintain unified platform design language across diverse medical specialties.</td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+
+              <!-- Key Research Insights Grid -->
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+                  <div class="p-6 rounded-2xl bg-[#e8e1f5]/60 border border-[rgba(38,36,40,0.08)] space-y-2">
+                      <div class="w-8 h-8 rounded-full bg-[#262428] text-[#ffffff] flex items-center justify-center font-bold text-xs">1</div>
+                      <h3 class="font-bold text-base text-[#262428]">AI Must Translate Complexity</h3>
+                      <p class="text-xs text-[#726c77] leading-relaxed">Medical jargon causes user anxiety. The AI interface must demystify lab results, prescriptions, and health guidance with clear language.</p>
+                  </div>
+
+                  <div class="p-6 rounded-2xl bg-[#f2dadf]/60 border border-[rgba(38,36,40,0.08)] space-y-2">
+                      <div class="w-8 h-8 rounded-full bg-[#262428] text-[#ffffff] flex items-center justify-center font-bold text-xs">2</div>
+                      <h3 class="font-bold text-base text-[#262428]">Healthcare is a Continuous Journey</h3>
+                      <p class="text-xs text-[#726c77] leading-relaxed">Care doesn't end at consultations. Patients need structured daily action items, milestone tracking, and seamless medication renewals.</p>
+                  </div>
+
+                  <div class="p-6 rounded-2xl bg-[#dbeadb]/60 border border-[rgba(38,36,40,0.08)] space-y-2">
+                      <div class="w-8 h-8 rounded-full bg-[#262428] text-[#ffffff] flex items-center justify-center font-bold text-xs">3</div>
+                      <h3 class="font-bold text-base text-[#262428]">Seamless Human Escalation</h3>
+                      <p class="text-xs text-[#726c77] leading-relaxed">While AI handles rapid triage, urgent symptoms or red flags must immediately offer one-tap human doctor access or emergency SOS alerts.</p>
+                  </div>
+              </div>
+
+              <!-- Information Architecture & Navigation Blueprint -->
+              <div class="bg-[#ffffff] p-8 md:p-10 rounded-3xl border border-[rgba(38,36,40,0.08)] shadow-sm space-y-8">
+                  <div>
+                      <span class="text-xs font-bold uppercase tracking-widest text-[#726c77] bg-[#dbeadb] px-3.5 py-1 rounded-full">System Design</span>
+                      <h3 class="text-2xl font-bold text-[#262428] mt-3">Information Architecture & Navigation Blueprint</h3>
+                  </div>
+
+                  <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                      <div class="p-4 rounded-xl bg-[#e8e1f5]/50 border border-[rgba(38,36,40,0.08)] text-center space-y-2">
+                          <i class="fa-solid fa-house-medical text-lg text-[#262428]"></i>
+                          <h4 class="font-bold text-xs text-[#262428]">1. Home / Today</h4>
+                          <p class="text-[11px] text-[#726c77]">Current treatment status, today's actions, upcoming dosage reminders.</p>
+                      </div>
+
+                      <div class="p-4 rounded-xl bg-[#f2dadf]/50 border border-[rgba(38,36,40,0.08)] text-center space-y-2">
+                          <i class="fa-solid fa-route text-lg text-[#262428]"></i>
+                          <h4 class="font-bold text-xs text-[#262428]">2. Treatment Journey</h4>
+                          <p class="text-[11px] text-[#726c77]">Milestones, phase timeline, recovery metrics & health progress logs.</p>
+                      </div>
+
+                      <div class="p-4 rounded-xl bg-[#f5e4d5]/50 border border-[rgba(38,36,40,0.08)] text-center space-y-2">
+                          <i class="fa-solid fa-robot text-lg text-[#262428]"></i>
+                          <h4 class="font-bold text-xs text-[#262428]">3. AI Health Guidance</h4>
+                          <p class="text-[11px] text-[#726c77]">Symptom analysis, wound scan, dietary suggestions & prescription upload.</p>
+                      </div>
+
+                      <div class="p-4 rounded-xl bg-[#dbeadb]/50 border border-[rgba(38,36,40,0.08)] text-center space-y-2">
+                          <i class="fa-solid fa-people-roof text-lg text-[#262428]"></i>
+                          <h4 class="font-bold text-xs text-[#262428]">4. Family & Files</h4>
+                          <p class="text-[11px] text-[#726c77]">Profiles for kids/parents, medical vault, permissions & lab reports.</p>
+                      </div>
+
+                      <div class="p-4 rounded-xl bg-[#e8e1f5]/50 border border-[rgba(38,36,40,0.08)] text-center space-y-2">
+                          <i class="fa-solid fa-truck-medical text-lg text-[#262428]"></i>
+                          <h4 class="font-bold text-xs text-[#262428]">5. Emergency SOS</h4>
+                          <p class="text-[11px] text-[#726c77]">One-tap ambulance dispatcher, family alerts & care team chat.</p>
+                      </div>
+                  </div>
+
+                  <!-- User Flow Sequence -->
+                  <div class="pt-4 border-t border-[rgba(38,36,40,0.06)]">
+                      <span class="text-xs font-bold text-[#726c77] uppercase tracking-wider block mb-3">Core User Flow Path</span>
+                      <div class="flex flex-wrap items-center gap-2 text-xs font-medium text-[#262428]">
+                          <span class="px-3 py-1.5 rounded-lg bg-[#fbfaf8] border border-gray-200">Open App</span>
+                          <i class="fa-solid fa-chevron-right text-[10px] text-[#726c77]"></i>
+                          <span class="px-3 py-1.5 rounded-lg bg-[#fbfaf8] border border-gray-200">Home Dashboard</span>
+                          <i class="fa-solid fa-chevron-right text-[10px] text-[#726c77]"></i>
+                          <span class="px-3 py-1.5 rounded-lg bg-[#fbfaf8] border border-gray-200">Check Today's Action</span>
+                          <i class="fa-solid fa-chevron-right text-[10px] text-[#726c77]"></i>
+                          <span class="px-3 py-1.5 rounded-lg bg-[#fbfaf8] border border-gray-200">AI Symptom / Prescription Check</span>
+                          <i class="fa-solid fa-chevron-right text-[10px] text-[#726c77]"></i>
+                          <span class="px-3 py-1.5 rounded-lg bg-[#fbfaf8] border border-gray-200">Complete Task & Update Log</span>
+                          <i class="fa-solid fa-chevron-right text-[10px] text-[#726c77]"></i>
+                          <span class="px-3 py-1.5 rounded-lg bg-[#fbfaf8] border border-gray-200">Human Care Team Escalation (If Needed)</span>
+                      </div>
+                  </div>
+              </div>
+
+          </div>
+      </section>
+
+      <!-- Feature Exploration Grid -->
+      <div class="max-w-6xl mx-auto px-6 py-12">
+          <header class="section-header">
+              <span class="section-tag">Next Phase Exploration</span>
+              <h1 class="section-title">Feature Exploration</h1>
+              <p class="section-subtitle">
+                  Having completed the core research, competitor analysis, scope, and user flows, these additional feature concepts explore ways to make medical information, pharmacy access, emergency assistance, and family care even more accessible.
+              </p>
+          </header>
+
+          <div class="filter-container">
+              <button class="filter-btn active" data-filter="all">All Features (9)</button>
+              <button class="filter-btn" data-filter="emergency">Emergency Services</button>
+              <button class="filter-btn" data-filter="ai">AI Guidance & Care</button>
+              <button class="filter-btn" data-filter="family">Family & Records</button>
+          </div>
+
+          <div class="feature-grid" id="featureGrid">
+
+              <article class="feature-card card-lavender" data-category="emergency">
+                  <div class="card-top">
+                      <span class="card-number">01</span>
+                      <span class="card-tag">Emergency</span>
+                  </div>
+                  <h2 class="feature-heading">Prescription Upload</h2>
+                  <p class="feature-explanation">
+                      A dedicated emergency option that allows users to quickly contact ambulance or emergency services when urgent assistance is required.
+                  </p>
+              </article>
+
+              <article class="feature-card card-pink" data-category="emergency">
+                  <div class="card-top">
+                      <span class="card-number">02</span>
+                      <span class="card-tag">Emergency</span>
+                  </div>
+                  <h2 class="feature-heading">Wound & Skin Concern Upload</h2>
+                  <p class="feature-explanation">
+                      A dedicated emergency option that allows users to quickly contact ambulance or emergency services when urgent assistance is required.
+                  </p>
+              </article>
+
+              <article class="feature-card card-peach" data-category="emergency family">
+                  <div class="card-top">
+                      <span class="card-number">03</span>
+                      <span class="card-tag">Emergency</span>
+                  </div>
+                  <h2 class="feature-heading">Family Emergency Contacts</h2>
+                  <p class="feature-explanation">
+                      Users can add trusted family members or emergency contacts so they can quickly reach them during an emergency.
+                  </p>
+              </article>
+
+              <article class="feature-card card-green" data-category="emergency">
+                  <div class="card-top">
+                      <span class="card-number">04</span>
+                      <span class="card-tag">Urgent Care</span>
+                  </div>
+                  <h2 class="feature-heading">Emergency Alert</h2>
+                  <p class="feature-explanation">
+                      A dedicated emergency option that allows users to quickly contact ambulance or emergency services when urgent assistance is required.
+                  </p>
+              </article>
+
+              <article class="feature-card card-lavender" data-category="ai">
+                  <div class="card-top">
+                      <span class="card-number">05</span>
+                      <span class="card-tag">E-Commerce & RX</span>
+                  </div>
+                  <h2 class="feature-heading">Pharmacy & Medication</h2>
+                  <p class="feature-explanation">
+                      Users can purchase their prescribed or eligible medications directly through the app. The pharmacy feature can allow users to search for medicines, view medication details, upload or connect prescriptions, add medicines to their cart, and place orders for delivery.
+                  </p>
+              </article>
+
+              <article class="feature-card card-pink" data-category="ai">
+                  <div class="card-top">
+                      <span class="card-number">06</span>
+                      <span class="card-tag">AI Intelligence</span>
+                  </div>
+                  <h2 class="feature-heading">AI Health Guidance</h2>
+                  <p class="feature-explanation">
+                      An AI-assisted guidance feature where users can ask about common health concerns and receive understandable information and possible next steps. Examples could include menstrual cramps, knee or joint pain, and nutrition-related questions.
+                  </p>
+              </article>
+
+              <article class="feature-card card-peach" data-category="ai">
+                  <div class="card-top">
+                      <span class="card-number">07</span>
+                      <span class="card-tag">Lifestyle & AI</span>
+                  </div>
+                  <h2 class="feature-heading">Food & Nutrition Suggestions</h2>
+                  <p class="feature-explanation">
+                      The experience can provide general food and nutrition suggestions based on the user's health-related questions and goals, while clearly distinguishing general guidance from personalized medical advice.
+                  </p>
+              </article>
+
+              <article class="feature-card card-green" data-category="family">
+                  <div class="card-top">
+                      <span class="card-number">08</span>
+                      <span class="card-tag">Family Care</span>
+                  </div>
+                  <h2 class="feature-heading">Family & Kids Health Space</h2>
+                  <p class="feature-explanation">
+                      A unified space to manage health journeys for loved ones with custom controls:
+                  </p>
+                  <ul class="feature-list">
+                      <li>Add health profiles for partner, children, and parents.</li>
+                      <li>Store basic medical information, medications, allergies, prescriptions, and health records.</li>
+                      <li>Add a collaborator via email to help manage a family member’s health information.</li>
+                      <li>Set permissions for what information the collaborator can access.</li>
+                      <li>Keep each family member’s information separate, organized, and private.</li>
+                  </ul>
+              </article>
+
+              <article class="feature-card card-lavender" data-category="family">
+                  <div class="card-top">
+                      <span class="card-number">09</span>
+                      <span class="card-tag">Health Records</span>
+                  </div>
+                  <h2 class="feature-heading">Medical Files</h2>
+                  <p class="feature-explanation">
+                      Users can securely upload and organize important medical documents such as reports, prescriptions, test results, and other health-related files.
+                  </p>
+                  <ul class="feature-list">
+                      <li>Medical conditions & Allergies</li>
+                      <li>Previous diagnoses & Prescriptions</li>
+                      <li>Lab reports & Medical documents</li>
+                      <li>Vaccination records</li>
+                      <li>Hospital & Doctor records</li>
+                  </ul>
+              </article>
+
+          </div>
+
+          <!-- Figma Screens Section (3 in a Row, Inner Vertical Scroll) -->
+          <section class="figma-screens-section">
+              <header class="section-header">
+                  <span class="section-tag">UI Mockups & Prototypes</span>
+                  <h1 class="section-title">Figma Screens</h1>
+                  <p class="section-subtitle">
+                      High-fidelity user interface concepts designed for mobile viewports. Scroll inside any card frame to view the full screen length.
+                  </p>
+              </header>
+
+              <div class="figma-screens-grid">
+
+                  <div class="screen-card">
+                      <div class="screen-header-meta">
+                          <span class="screen-title">01. Prescription Upload</span>
+                      </div>
+                      <div class="screen-image-container">
+                          <img src="C:\Users\pavit\Downloads\health check.png" alt="Figma Screen 01 - Prescription Upload" class="figma-screen-img" />
+                      </div>
+                      <p class="screen-caption">Emergency prescription connection & urgent care upload flow.</p>
+                  </div>
+
+                  <div class="screen-card">
+                      <div class="screen-header-meta">
+                          <span class="screen-title">02. Wound & Skin Concern</span>
+                      </div>
+                      <div class="screen-image-container">
+                          <img src="C:\Users\pavit\Downloads\wond.png" alt="Figma Screen 02 - Wound & Skin Concern" class="figma-screen-img" />
+                      </div>
+                      <p class="screen-caption">Visual assessment submission and immediate escalation UI.</p>
+                  </div>
+
+                  <div class="screen-card">
+                      <div class="screen-header-meta">
+                          <span class="screen-title">03. Family Emergency Contacts</span>
+                      </div>
+                      <div class="screen-image-container">
+                          <img src="C:\Users\pavit\Downloads\family.png" alt="Figma Screen 03 - Emergency Contacts" class="figma-screen-img" />
+                      </div>
+                      <p class="screen-caption">Quick-dial emergency network and trusted contacts setup.</p>
+                  </div>
+
+                  <div class="screen-card">
+                      <div class="screen-header-meta">
+                          <span class="screen-title">04. Emergency Alert System</span>
+                      </div>
+                      <div class="screen-image-container">
+                          <img src="C:\Users\pavit\Downloads\Emergency.png" alt="Figma Screen 04 - Emergency Alert System" class="figma-screen-img" />
+                      </div>
+                      <p class="screen-caption">One-tap ambulance dispatcher and location sharing screen.</p>
+                  </div>
+
+                  <div class="screen-card">
+                      <div class="screen-header-meta">
+                          <span class="screen-title">05. Pharmacy & Medication Search</span>
+                      </div>
+                      <div class="screen-image-container">
+                          <img src="C:\Users\pavit\Downloads\Pharmacy.png" alt="Figma Screen 05 - Pharmacy Search" class="figma-screen-img" />
+                      </div>
+                      <p class="screen-caption">Search medicines, check stock, and review dosage details.</p>
+                  </div>
+
+                  <div class="screen-card">
+                      <div class="screen-header-meta">
+                          <span class="screen-title">06. Prescription Delivery Checkout</span>
+                      </div>
+                      <div class="screen-image-container">
+                          <img src="C:\Users\pavit\Downloads\iPhone 13 & 14 - 10.png" alt="Figma Screen 06 - RX Delivery Checkout" class="figma-screen-img" />
+                      </div>
+                      <p class="screen-caption">Cart verification, insurance check, and order dispatch flow.</p>
+                  </div>
+
+                  <div class="screen-card">
+                      <div class="screen-header-meta">
+                          <span class="screen-title">07. AI Health Assistant</span>
+                      </div>
+                      <div class="screen-image-container">
+                          <img src="C:\Users\pavit\Downloads\ai.png" alt="Figma Screen 07 - AI Health Assistant" class="figma-screen-img" />
+                      </div>
+                      <p class="screen-caption">Conversational interface answering symptom and wellness queries.</p>
+                  </div>
+
+                  <div class="screen-card">
+                      <div class="screen-header-meta">
+                          <span class="screen-title">08. Nutrition & Wellness Plan</span>
+                      </div>
+                      <div class="screen-image-container">
+                          <img src="C:\Users\pavit\Downloads\Food.png" alt="Figma Screen 08 - Nutrition & Wellness Plan" class="figma-screen-img" />
+                      </div>
+                      <p class="screen-caption">Personalized dietary suggestions tailored to health goals.</p>
+                  </div>
+
+                  <div class="screen-card">
+                      <div class="screen-header-meta">
+                          <span class="screen-title">09. Family Space Dashboard</span>
+                      </div>
+                      <div class="screen-image-container">
+                          <img src="C:\Users\pavit\Downloads\health check (2).png" alt="Figma Screen 09 - Family Space Dashboard" class="figma-screen-img" />
+                      </div>
+                      <p class="screen-caption">Emergency Contact.</p>
+                  </div>
+
+                  <div class="screen-card">
+                      <div class="screen-header-meta">
+                          <span class="screen-title">10. Emergency alert Process</span>
+                      </div>
+                      <div class="screen-image-container">
+                          <img src="C:\Users\pavit\Downloads\Frame.png" alt="Figma Screen 10 - Collaborator Permissions" class="figma-screen-img" />
+                      </div>
+                      <p class="screen-caption">Live Location Tracker during your emergency sutiation.</p>
+                  </div>
+
+                  <div class="screen-card">
+                      <div class="screen-header-meta">
+                          <span class="screen-title">11. Medical Vault & Documents</span>
+                      </div>
+                      <div class="screen-image-container">
+                          <img src="C:\Users\pavit\Downloads\iPhone 13 & 14 - 14.png" alt="Figma Screen 11 - Medical Vault" class="figma-screen-img" />
+                      </div>
+                      <p class="screen-caption">Secure categorised repository for lab tests, records & vaccines.</p>
+                  </div>
+
+                  <div class="screen-card">
+                      <div class="screen-header-meta">
+                          <span class="screen-title">12. Treatment Journey Timeline</span>
+                      </div>
+                      <div class="screen-image-container">
+                          <img src="C:\Users\pavit\Downloads\Frame 51.png" alt="Figma Screen 12 - Treatment Journey Timeline" class="figma-screen-img" />
+                      </div>
+                      <p class="screen-caption">Full chronological roadmap from onboarding to ongoing care.</p>
+                  </div>
+
+              </div>
+          </section>
+
+          <!-- Case Study Conclusion Section -->
+          <section class="conclusion-section">
+              <div class="conclusion-container">
+                  <span class="conclusion-badge">Case Study Conclusion</span>
+                  <h2 class="conclusion-title">Designing Thoughtful Healthcare Experiences</h2>
+                  <p class="conclusion-desc">
+                      Through NURA, I explored how human-centered design can turn complex AI-assisted clinical workflows into an encouraging, transparent, and reassuring treatment journey for patients and caregivers alike.
+                  </p>
+                  <div class="conclusion-actions">
+                      <a href="index.html" class="conclusion-btn primary-btn hover-target">Return to Portfolio</a>
+                      <a href="index.html#contact" class="conclusion-btn secondary-btn hover-target">Discuss Product Design Roles</a>
+                  </div>
+              </div>
+          </section>
+      </div>
+  </main>
+
+  <!-- Scripts -->
+  </main><!-- 5. FOOTER -->
+    <footer class="bg-[#ffffff] border-t border-[rgba(38,36,40,0.08)] py-8 relative z-10">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-2">
+                <span class="font-bold text-sm text-[#262428]">Pavithra Design Journey</span>
+                <span class="text-xs text-[#726c77]">© <span id="current-year"></span> All Rights Reserved</span>
+            </div>
+
+            <div class="flex items-center gap-6 text-xs text-[#726c77]">
+                <a href="index.html#hero" onclick="showMainLanding()" class="hover:text-[#262428] hover-target">Home</a>
+                <a href=" index.html#about" onclick="showMainLanding('about')" class="hover:text-[#262428] hover-target">About</a>
+                <a href="index.html#work" onclick="showMainLanding('work')" class="hover:text-[#262428] hover-target">Work</a>
+                <a href="index.html#contact" onclick="showMainLanding('contact')" class="hover:text-[#262428] hover-target">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+
+ <!-- Working Custom Cursor Script -->
+<script>
+  const cursorDot = document.getElementById('cursor-dot');
+  const cursorRing = document.getElementById('cursor-ring');
+  
+  let mouseX = 0, mouseY = 0;
+  let ringX = 0, ringY = 0;
+
+  window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    cursorDot.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
+  });
+
+  function renderCursor() {
+    ringX += (mouseX - ringX) * 0.2;
+    ringY += (mouseY - ringY) * 0.2;
+    cursorRing.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
+    requestAnimationFrame(renderCursor);
+  }
+  
+  requestAnimationFrame(renderCursor);
+
+  // Hover animations for interactive components
+  const hoverTargets = document.querySelectorAll('a, button, input, textarea');
+  
+  hoverTargets.forEach(target => {
+    target.addEventListener('mouseenter', () => {
+      cursorRing.style.width = '64px';
+      cursorRing.style.height = '64px';
+      cursorRing.style.backgroundColor = 'rgba(232, 225, 245, 0.6)';
+      cursorRing.style.borderColor = 'rgba(38, 36, 40, 0.4)';
+    });
+    
+    target.addEventListener('mouseleave', () => {
+      cursorRing.style.width = '42px';
+      cursorRing.style.height = '42px';
+      cursorRing.style.backgroundColor = 'rgba(232, 225, 245, 0.35)';
+      cursorRing.style.borderColor = 'rgba(38, 36, 40, 0.25)';
+    });
+  });
+</script>
+
+</body>
+</html>
